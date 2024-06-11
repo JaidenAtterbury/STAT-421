@@ -1,0 +1,265 @@
+---
+title: "STAT 421 Homework 10"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("AlgDesign")
+```
+
+**Lecture 24 Problem 1:** $\\$
+Suppose in a $2^{5-2}$ design, one of the generators involves all $5$ letters. In this problem, our goal is to decide whether or not there is a choice of the second generator which will lead to a good design (so that no main effects are aliased with each other). We will decided on if this generator exists by first considering generators that only have $1$ letter, then only $2$ letters, etc. This consideration is done below.
+
+Starting with a second generator that includes only $1$ letter, given the fact that the generators are not estimable, then we are guaranteed to have a main effect that is not estimable. Thus, this is not a good design.
+
+If instead we start with a generator that includes $2$ letters, then no matter the choice of the $2$ letter generator, we will have two main effects aliased with each other. Namely, the two main effects that appear in the second generator are aliased with each other. For example, our five letter generator $ABCDE$ implies a defining relation such as $ABCDE=1$. Now if we consider a $2$ letter generator $AB$, then using "magic multiplication," it turns out that our defining relation becomes $1=ABCDE=AB=CDE$. Lastly, this defining relation implies one part of the alias structure is $A=BCDE=B=ACDE$, as can be seen $A$ and $B$ are aliased with each other. It is important to note that this pattern holds for any $2$ letter second generator. Thus, this is not a good design.
+
+Alternatively, if we start with a generator that includes $3$ letters, then no matter the choice of the $3$ letter generator, we will have two main effects aliased with each other. Namely, the two main effects that appear in the resulting third generator are aliased with each other. For example, our five letter generator $ABCDE$ implies a defining relation such as $ABCDE=1$. Now if we consider a $3$ letter generator $ABC$, then using "magic multiplication," it turns out that our defining relation becomes $1=ABCDE=ABC=DE$. Lastly, this defining relation implies one part of the alias structure is $D=ABCE=ABCD=E$, as can be seen $D$ and $E$ are aliased with each other. It is important to note that this pattern holds for any $3$ letter second generator. Thus, this is not a good design.
+
+Lastly, if we start with a second generator that includes $4$ letters, given the fact that the generators are not estimable, then due to "magic multiplication," we are guaranteed to have a main effect that is not estimable. Namely, the non-estimable main effect is due to our third generator. For example, our five letter generator $ABCDE$ implies a defining relation such as $ABCDE=1$. Now if we consider a $4$ letter generator $ABCD$, then using "magic multiplication," it turns out that our defining relation becomes $1=ABCDE=ABCD=E$, as can be seen $E$ is not estimable. It is important to note that this pattern holds for any $4$ letter second generator. Thus, this is not a good design.
+
+As can be seen from the above analysis, due to the fact that all possibilities for the second generator lead to a design that either has an aliased or non-estimable main effect, it follows that in a $2^{5-2}$ design with a five letter generator, there is no choice of a second generator that leads to a good design.
+
+**Lecture 24 Problem 2:** $\\$
+Sometimes two alias structures will look different, but only because of the relabeling of the factors. For example, the goal of this problem is to show that a $2^{6-3}$ design with the defining relation $ABD=ACE=BCF=1$, is the same as a $2^{6-3}$ design with the defining relation $ABC=ADE=CDF=1$. In the following paragraph, we will show that these two designs are the same.
+
+In the $2^{6-3}$ design with the defining relation $ABD=ACE=BCF=1$, if we let $B=C$, $C=D$, and $D=B$, then we get a $2^{6-3}$ design with the defining relation $ACB=ADE=CDF=1$. Switching the order of some of the words in the defining relation, we obtain the $2^{6-3}$ design with the defining relation $ABC=ADE=CDF=1$. Thus we have shown after a little bit or relabeling, a $2^{6-3}$ design with the defining relation $ABD=ACE=BCF=1$, is the same as a $2^{6-3}$ design with the defining relation $ABC=ADE=CDF=1$.
+
+**Lecture 24 Problem 3a:** $\\$
+In this problem, we will consider the data from problem 8.10. In this problem, an article written by J. J. Pignatiello Jr. and J. S. Ramberg in the Journal of Quality Technology (Vol. 17, 1985, pp.98–206) describes the use of a replicated fractional factorial to investigate the effect of five factors on the free height of leaf springs used in an automotive application. The factors are: furnace temperature (A), heating time (B), transfer time (C), hold down time (D), and quench oil temperature (E). The data for this experiment are shown below. 
+
+```{r echo=F, out.width = "50%", fig.align = "center"}
+knitr::include_graphics("data21.png")
+```
+
+The goal of this problem is to find out what type of design this is (i.e $2^{?-?}$), and what the defining relation is. Once we have those things we will find what effect $E$ is aliased with. We will do this by noting that the $A$, $B$, and $C$ columns look "normal," but the $D$ column does not follow the normal pattern. These tasks are done below.
+
+As can be seen by the short $+/-$ table, $D$ does not follow the normal pattern. However, after a quick examination of the table, one can see that the $D$ column is generated by taking the product of the $A$, $B$, and $C$ columns (i.e. $D=ABC$). This implies that the defining relation for this design is $ABCD=1$, and hence this experiment has a $2^{5-1}$ design. As can be seen from the defining relation, $ABCDE=E$, and hence the $E$ effect is aliased with the $ABCDE$ effect.
+
+**Lecture 24 Problem 3b:** $\\$
+Although we are supposed to skip this problem, given that it is helpful in the completion of the next few parts, we will do it anyway. In this problem, our goal is to write out the alias structure by hand. We will also count the number of effects to make sure we aren't missing anything in the alias structure. The alias structure and the corresponding effects count are done below.
+
+After much "magic multiplication," we can see that the alias structure for a $2^{5-1}$ design with the defining relation $ABCD=1$ is: $A=BCD$, $B=ACD$, $C=ABD$, $D=ABC$, $E=ABCDE$, $AB=CD$, $AC=BD$, $AD=BC$, $AE=BCDE$, $BE=ACDE$, $CE=ABDE$, $DE=ABCE$, $ABE=CDE$, $ACE=BDE$, and $ADE=BCE$.
+
+Moving onto the counts, as discussed in lecture, there are $\binom{5}{1}=5$ main effects in the alias structure of a $2^{5-1}$ design. These effects are $A$, $B$, $C$, $D$, and $E$. All of these effects are present in the above alias structure.
+
+As discussed in lecture, there are $\binom{5}{2}=10$ two-way interaction effects in the alias structure of a $2^{5-1}$ design. These effects are $AB$, $AC$, $AD$, $AE$, $BC$, $BD$, $BE$, $CD$, $CE$, and $DE$. All of these effects are present in the above alias structure.
+
+As discussed in lecture, there are $\binom{5}{3}=10$ three-way interaction effects in the alias structure of a $2^{5-1}$ design. These effects are $ABC$, $ABD$, $ABE$, $ACD$, $ACE$, $ADE$, $BCD$, $BCE$, $BDE$, and $CDE$. All of these effects are present in the above alias structure.
+
+As discussed in lecture, there are $\binom{5}{4}=5$ four-way interaction effects in the alias structure of a $2^{5-1}$ design. These effects are $ABCD$, $ABCE$, $ABDE$, $ACDE$, and $BCDE$. All of these effects are present in the above alias structure.
+
+As discussed in lecture, there is $\binom{5}{5}=1$ five-way interaction effect in the alias structure of a $2^{5-1}$ design. This effect is $ABCDE$. This effect is present in the above alias structure.
+
+As seen above, we have shown the alias structure for the $2^{5-1}$ design with the defining relation $ABCD=1$, as well as the fact that it satisfies the intended effects count.
+
+**Lecture 24 Problem 3c:** $\\$
+In this problem, we will write R code to generate the ANOVA table. Furthermore, at the significance level of $\alpha=0.01$, we will determine the significant effects. We will do this by making the shorter $+/-$ table, generating the missing factors, identifying the necessary runs, and selecting the corresponding $y$ values from problem 8.10. We will start by making the shorter $+/-$ table below and identifying the runs.
+
+```{r message=F}
+# Create the shorter +/- table with missing factors:
+design <- gen.factorial(c(2,2,2,2,3),5,varNames=c("A","B","C","E","R"))
+attach(design)
+
+# Generate the missing factor:
+D <- A*B*C
+
+# Display the shorter +/- table:
+cbind(A,B,C,D,E,R)
+```
+
+As seen above, the runs needed in order to satisfy the defining relation $ABCD=1$ are: $(1)$, $ad$, $bd$, $ab$, $cd$, $ac$, $bc$, $abcd$, $e$, $ade$, $bde$, $abe$, $cde$, $ace$, $bce$, and $abcde$. Now we will select the corresponding $y$ values from problem 8.10. Then we will generate the ANOVA table. This is done in R below.
+
+```{r}
+# Set up important numbers for the experiment:
+num_reps <- 3
+num_runs <- 16
+
+# Set up an empty matrix for the data:
+y_mat <- matrix(nrow = num_reps, ncol = num_runs)
+
+# Fill in the matrix with the data from the problem:
+y_mat[1,] <- c(7.78, 8.15, 7.50, 7.59, 7.54, 7.69, 7.56, 7.56, 7.50, 7.88, 7.50,
+               7.63, 7.32, 7.56, 7.18, 7.81)
+y_mat[2,] <- c(7.78, 8.18, 7.56, 7.56, 8.00, 8.09, 7.52, 7.81, 7.25, 7.88, 7.56,
+               7.75, 7.44, 7.69, 7.18, 7.50)
+y_mat[3,] <- c(7.81, 7.88, 7.50, 7.75, 7.88, 8.06, 7.44, 7.69, 7.12, 7.44, 7.50,
+               7.56, 7.44, 7.62, 7.25, 7.59)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, D, E, R, y)
+```
+
+```{r}
+# turn the letters into factors:
+A <- as.factor(A)
+B <- as.factor(B)
+C <- as.factor(C)
+D <- as.factor(D)
+E <- as.factor(E)
+
+# Define Helmert's contrast for use in model 1:
+contr = as.character("contr.helmert")
+
+# Create the model for the data:
+model_1 <- lm(y~A*B*C*D*E,
+              contrasts = list(A=contr, B=contr, C=contr, D=contr, E=contr))
+
+# Run ANOVA in R to get the results:
+summary.aov(model_1)
+```
+
+As can be seen from the above ANOVA table, the significant effects at the $\alpha=0.01$ significance level are: the $[A]=A+BCD$ effect with a p-value of $1.12\times10^{-6}$, the $[B]=B+ACD$ effect with a p-value of $0.000302$, the $[E]=E+ABCDE$ effect with a p-value of $1.42\times10^{-6}$, and lastly the $[BE]=BE+ACDE$ effect with a p-value of $0.000640$. All of the other effects are insignificant or non-estimable.
+
+**Lecture 24 Problem 3d:** $\\$
+In this problem, we will estimate all of the estimable effects, and use Daniel's method to determine the significant effects. We will also determine if these results agree with those in part c. We will start by estimating all of the estimable effects. This is done in R below.
+
+```{r message=F}
+# Correctly adjust the parameter estimates:
+eff <- 2*model_1$coefficients
+
+# Remove the grand mean:
+eff <- eff[2:length(eff)]
+
+# Display the adjusted parameter estimates:
+eff <- na.omit(as.matrix(eff, col=1))
+eff[,1]
+```
+
+As can be seen above, the estimates of the estimable effects are: $[A]=A+BCD=0.242083333$, $[B]=B+ACD=-0.16375$, $[C]=C+ABD=-0.049583333$, $[D]=D+ABC=0.09125$, $[E]=E+ABCDE=-0.23875$, $[AB]=AB+CD=-0.029583333$, $[AC]=AC+BD=0.00125$, $[BC]=BC+AD=-0.022916667$, $[AE]=AE+BCDE=0.06375$, $[BE]=BE+ACDE=0.152916667$, $[CE]=CE+ABDE=-0.032916667$, $[DE]=DE+ABCE=0.039583333$, $[ABE]=ABE+CDE=0.002083333$, $[ACE]=ACE+BDE=0.019583333$, and lastly $[BCE]=BCE+ADE=-0.059583333$. We will now use Daniel's method to determine the significant effects.
+
+```{r}
+# Create a qqplot of the effects:
+qqnorm(eff)
+
+# Create a straight line through the "straight line/middle portion" of the data:
+abline(0, 0.08)
+```
+
+As seen from the above QQplot, the two smallest and two largest in magnitude effects are all considered significant due to their non-normality. These four effects are the $E$, $B$, $BE$, and $A$ effects, respectively. Thus we can see that Daniel's method gives us the same results as in part c.
+
+**Lecture 25 Problem 1a:** $\\$
+In this problem, we will consider the $2^{6-2}$ design with the defining relations $ABCE=BCDF=1$. In particular, the goal of this problem is to find the four blocks needed so that the $ABD$ and $ACD$ effect get confounded with block. To start this problem, we will use the fact that $E=ABC$ and $F=BCD$ to generate the smaller $+/-$ table. In this $+/-$ table we will include the $ABD$, $ACD$, and $BC$ effects as they will be useful later, as well as include the runs needed to obey the defining relation. This $+/-$ table is shown below.
+
+```{r echo=F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("lect25q1a.png")
+```
+
+In order to find the four blocks needed so that the $ABD$ and $ACD$ effect gets confounded with block, we must first split by $ABD$ using the $+/-$ table above, this is done below.
+\begin{align*}
+\text{ABD=-} &: \left[(1),\ abf,\ cef,\ abce,\ adef,\ bde,\ acd,\ bcdf\right] \\
+\text{ABD=+} &: \left[ae,\ bef,\ acf,\ bc,\ df,\ abd,\ cde,\ abcdef\right]
+\end{align*}
+Now, if we split by $ACD$ and consider the different $+/-$ combinations with $ABD$, we obtain the following four blocks shown below.
+\begin{align*}
+\text{Block 1} &: \left[(1),\ abce,\ adef,\ bcdf\right] \\
+\text{Block 2} &: \left[bef,\ acf,\ abd,\ cde\right] \\
+\text{Block 3} &: \left[abf,\ cef,\ bde,\ acd\right] \\
+\text{Block 4} &: \left[ae,\ bc,\ df,\ abcdef\right]
+\end{align*}
+These four blocks include the treatment combinations that ensure the $ABD$ effect and the $ACD$ effect are confounded with the block effect.
+
+**Lecture 25 Problem 1b:** $\\$
+In this problem, we will find the linear combination of the four block sums $(B_1,B_2,B_3,B_4)$ that is confounded with $ABD$. We will consider the fact that $\text{ABD effect}\propto(\text{Avg y}|ABD=+)-(\text{Avg y}|ABD=-)$ in our calculation. This calculation is done below.
+
+Based on the above definition of the $ABD$ effect, and the above derivation of the four blocks, it turns out that the $ABD$ effect is proportional to the following linear combination of the four block sums: $(B_2+B_4)-(B_1+B_3)$.
+
+**Lecture 25 Problem 1c:** $\\$
+In this problem, we will find the linear combination of the four block sums $(B_1,B_2,B_3,B_4)$ that is confounded with $ACD$. We will consider the fact that $\text{ACD effect}\propto(\text{Avg y}|ACD=+)-(\text{Avg y}|ACD=-)$ in our calculation. This calculation is done below.
+
+Based on the above definition of the $ACD$ effect, and the above derivation of the four blocks, it turns out that the $ACD$ effect is proportional to the following linear combination of the four block sums: $(B_3+B_4)-(B_1+B_2)$.
+
+**Lecture 25 Problem 1d:** $\\$
+In this problem, we will find the linear combination of the four block sums $(B_1,B_2,B_3,B_4)$ that is confounded with $BC$. We will consider the fact that $\text{BC effect}\propto(\text{Avg y}|BC=+)-(\text{Avg y}|BC=-)$ in our calculation. This calculation is done below.
+
+Based on the above definition of the $BC$ effect, and the above derivation of the four blocks, it turns out that the $BC$ effect is proportional to the following linear combination of the four block sums: $(B_1+B_4)-(B_2+B_3)$.
+
+**Lecture 25 Problem 2a:** $\\$
+Suppose a $2^{4-1}$ experiment with the defining relation $ABCD=1$ is performed in two incomplete blocks generated in order to confound the $CD$ effect with block. The goal of the entire problem is to see how the block effect in the incomplete design is related to the block effect in the complete design. Before we can do that, we must first answer a few questions. The first of these questions, and the goal of this problem, is to write down what it means mathematically to say $AB$ is aliased with $CD$. This is written below.
+
+Mathematically, to say $AB$ is aliased with $CD$ means that $[AB]=[CD]=AB+CD$.
+
+**Lecture 25 Problem 2b:** $\\$
+The second of these questions, and the goal of this problem, is to write down what it means mathematically to say $CD$ is confounded by block in the incomplete design. This is written below.
+
+Mathematically, to say $CD$ is confounded by block in the incomplete design means that $[CD]=[block]$.
+
+**Lecture 25 Problem 2c:** $\\$
+The last of these questions, and the goal of this problem, is to write down what it means mathematically to say $CD$ is confounded by block in the complete design. This is written below.
+
+Mathematically, to say $CD$ is confounded by block in the complete design means that $CD=block$.
+
+**Lecture 25 Problem 2d:** $\\$
+We will now put these three equations together to see how the block effect in the incomplete design is related to the block effect in the complete design. This is done below.
+
+As shown in part a, $[CD]=AB+CD$. However, in part b we found that $[CD]=[block]$, thus it follows that $[block]=AB+CD$. Finally, in part c we found that $CD=block$, thus it follows that $[block]=AB+block$. Therefore, in this particular design, the block effect in the incomplete design is related to the block effect in the complete design by the following equation: $[block]=AB+block$.
+
+**Lecture 26 Problem 1a:** $\\$
+In this problem, without using the expression derived in class for $E[MS_{Tr}]$, we will show that $E[SS_T]=(an-1)\sigma^2_{\epsilon}+n(a-1)\sigma^2_{\tau}$. To make the derivation easier we will use results already derived in class, namely that $y_{ij}=\mu+\tau_i+\epsilon_{ij}\implies\bar{y}_{..}=\mu+\bar{\tau}_{.}+\bar{\epsilon}_{..}$. We will also use the fact that if $\tau_i\overset{iid}{\sim} N(0,\sigma^2_\tau)$, $\epsilon_{ij}\overset{iid}{\sim} N(0,\sigma^2_\epsilon)$, and $\tau_i\perp\epsilon_{ij}$, then $E[(\tau_i-\bar{\tau}_{.})^2]=\left(1-\frac{1}{a}\right)\sigma^2_\tau$ and $E[(\tau_i-\bar{\tau}_{.})(\epsilon_{ij}-\bar{\epsilon}_{..})]=0$. This calculation is done below.
+\begin{align*}
+E[SS_T] &= E\left[\sum^a_i\sum^n_j(y_{ij}-\bar{y}_{..})^2\right] \\
+&= E\left[\sum^a_i\sum^n_j(\mu+\tau_i+\epsilon_{ij}-\mu-\bar{\tau}_{.}-\bar{\epsilon}_{..})^2\right] \\
+&= E\left[\sum^a_i\sum^n_j(\tau_i+\epsilon_{ij}-\bar{\tau}_{.}-\bar{\epsilon}_{..})^2\right] \\
+&= \sum^a_i\sum^n_jE\left[((\tau_i-\bar{\tau}_{.})+(\epsilon_{ij}-\bar{\epsilon}_{..}))^2\right] \\
+&= \sum^a_i\sum^n_jE\left[(\tau_i-\bar{\tau}_{.})^2+(\epsilon_{ij}-\bar{\epsilon}_{..})^2+2(\tau_i-\hat{\tau}_{.})(\epsilon_{ij}-\bar{\epsilon}_{..})\right] \\
+&= \sum^a_i\sum^n_j\left(E\left[(\tau_i-\bar{\tau}_{.})^2\right]+E\left[(\epsilon_{ij}-\bar{\epsilon}_{..})^2\right]+2E[(\tau_i-\bar{\tau}_{.})(\epsilon_{ij}-\bar{\epsilon}_{..})]\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+E\left[(\epsilon_{ij}-\bar{\epsilon}_{..})^2\right]+0\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+E\left[(\epsilon_{ij}-\bar{\epsilon}_{..})^2\right]\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+V\left[\epsilon_{ij}-\bar{\epsilon}_{..}\right]+E^2\left[\epsilon_{ij}-\bar{\epsilon}_{..}\right]\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+V[\epsilon_{ij}]+V[\bar{\epsilon}_{..}]-2Cov[\epsilon_{ij},\bar{\epsilon}_{..}]+(E[\epsilon_{ij}]-E[\bar{\epsilon}_{..}])^2\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+\sigma^2_\epsilon+\frac{1}{an}\sigma^2_\epsilon-\frac{2}{an}\sum^a_i\sum^n_jCov[\epsilon_{ij},\epsilon_{kl}]+(0-0)^2\right) \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+\sigma^2_\epsilon+\frac{1}{an}\sigma^2_\epsilon-\frac{2}{an}V[\epsilon_{ij}]\right) \quad \text{(Only where $i=k$ and $j=l$)} \\
+&= \sum^a_i\sum^n_j\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+\sigma^2_\epsilon+\frac{1}{an}\sigma^2_\epsilon-\frac{2}{an}\sigma^2_\epsilon\right) \\
+&= an\left(\left(1-\frac{1}{a}\right)\sigma^2_\tau+\sigma^2_\epsilon+\frac{1}{an}\sigma^2_\epsilon-\frac{2}{an}\sigma^2_\epsilon\right) \\
+&= (an-n)\sigma^2_\tau+an\sigma^2_\epsilon+\sigma^2_\epsilon-2\sigma^2_\epsilon \\
+&= (an-1)\sigma^2_\epsilon+n(a-1)\sigma^2_\tau
+\end{align*}
+Hence we have shown that $E[SS_T]=(an-1)\sigma^2_{\epsilon}+n(a-1)\sigma^2_{\tau}$.
+
+**Lecture 26 Problem 1b:** $\\$
+In this problem, we will consider and use the fact that $V[\bar{y}_{i.}]=\frac{1}{n^2}\left(\sum^n_jV[y_{ij}]+\sum_{j\neq k}Cov[y_{ij},y_{ik}]\right)$ to find $V[\bar{y}_{i.}]$ in terms of $\sigma^2_\tau$, $\sigma^2_\epsilon$, and $n$. In this calculation we will use the following facts developed in previous lectures: since $\tau_i\overset{iid}{\sim} N(0,\sigma^2_\tau)$ it follows that $V[\tau_i]=\sigma^2_\tau$, since $\epsilon_{ij}\overset{iid}{\sim} N(0,\sigma^2_\epsilon)$ it follows that $E[\epsilon_{ij}]=\sigma^2_\epsilon$, since $\tau_i\perp\epsilon_{ij}$ it follows that $Cov[\tau_i,\epsilon_{ij}]=0$, since $\epsilon_{ij}$ is iid when $j\neq k$ it follows that $Cov[\epsilon_{ij},\epsilon_{ik}]=0$, if c is a constant then $V[c]=0$ and $Cov[c,X]=0$, $Cov[X,X]=V[X]$, and $Cov[X+Y,Z+W]=Cov[X,Z]+Cov[X,W]+Cov[Y,Z]+Cov[Y,W]$. This calculation is done below.
+\begin{align*}
+V[\bar{y}_{i.}] &= \frac{1}{n^2}\left(\sum^n_jV[y_{ij}]+\sum_{j\neq k}Cov[y_{ij},y_{ik}]\right) \\
+&= \frac{1}{n^2}\left(\sum^n_jV[\mu+\tau_i+\epsilon_{ij}]+\sum_{j\neq k}Cov[\mu+\tau_i+\epsilon_{ij},\mu+\tau_i+\epsilon_{ik}]\right) \\
+&= \frac{1}{n^2}(\sum^n_j(V[\mu]+V[\tau_i+\epsilon_{ij}]+2Cov[\mu,\tau_i+\epsilon_{ij}])+\sum_{j\neq k}(Cov[\mu,\mu]+Cov[\mu,\tau_i]+Cov[\mu,\epsilon_{ik}] \\
+& \ \ \ \ +Cov[\tau_i,\mu]+Cov[\tau_i,\tau_i]+Cov[\tau_i,\epsilon_{ik}]+Cov[\epsilon_{ij},\mu]+Cov[\epsilon_{ij},\tau_i]+Cov[\epsilon_{ij},\epsilon_{ik}])) \\
+&= \frac{1}{n^2}\left(\sum^n_j(V[\tau_i]+V[\epsilon_{ij}]+2Cov[\tau_i,\epsilon_{ij}])+\sum_{j\neq k}V[\tau_i]\right) \\
+&= \frac{1}{n^2}\left(\sum^n_j(\sigma^2_\tau+\sigma^2_\epsilon)+\sum_{j\neq k}\sigma^2_\tau\right) \\
+&= \frac{1}{n^2}\left(n\sigma^2_\tau+n\sigma^2_\epsilon+n(n-1)\sigma^2_\tau\right) \\
+&= \frac{1}{n}\sigma^2_\tau+\frac{1}{n}\sigma^2_\epsilon+\frac{n-1}{n}\sigma^2_\tau \\
+&= \sigma^2_\tau+\frac{1}{n}\sigma^2_\epsilon
+\end{align*}
+Hence we have shown that $V[\bar{y}_{i.}]=\sigma^2_\tau+\frac{1}{n}\sigma^2_\epsilon$.
+
+**Lecture 26 Problem 2a:** $\\$
+As described in class, it is possible to get a negative value for $\hat{\sigma}^2_\tau$. In this problem, we will consider a one-factor design, and our goal is to show that $prob\left(\hat{\sigma}^2_\tau<0\right)=prob\left(F_{a-1,a(n-1)}<\frac{\sigma^2_\epsilon}{\sigma^2_\epsilon+n\sigma^2_\tau}\right)$. In this calculation we will use the following facts developed in previous lectures: $\hat{\sigma}^2_\tau=\frac{1}{n}(MS_{Tr}-MS_E)$, $\frac{MS_{Tr}/E[MS_{Tr}]}{MS_E/E[MS_E]}\sim F_{a-1,a(n-1)}$, $E[MS_{Tr}]=\sigma^2_\epsilon+n\sigma^2_\tau$, and $E[MS_E]=\sigma^2_\epsilon$. This calculation is done below.
+\begin{align*}
+P\left(\hat{\sigma}^2_\tau<0\right) &= P\left(\frac{MS_{Tr}}{n}-\frac{MS_E}{n}<0\right) \\
+&= P\left(\frac{MS_{Tr}}{n}<\frac{MS_E}{n}\right) \\
+&= P\left(MS_{Tr}<MS_E\right) \\
+&= P\left(\frac{MS_{Tr}}{MS_E}<1\right) \\
+&= P\left(\frac{MS_{Tr}/E[MS_{Tr}]}{MS_E/E[MS_E]}<\frac{E[MS_E]}{E[MS_{Tr}]}\right) \\
+&= P\left(F_{a-1,a(n-1)}<\frac{E[MS_E]}{E[MS_{Tr}]}\right) \\
+&= P\left(F_{a-1,a(n-1)}<\frac{\sigma^2_\epsilon}{\sigma^2_\epsilon+n\sigma^2_\tau}\right)
+\end{align*}
+Hence we have shown that $prob\left(\hat{\sigma}^2_\tau<0\right)=prob\left(F_{a-1,a(n-1)}<\frac{\sigma^2_\epsilon}{\sigma^2_\epsilon+n\sigma^2_\tau}\right)$.
+
+**Lecture 26 Problem 2b:** $\\$
+The result in part a is helpful in that it tells us how surprised we should be if/when we see a negative value for $\hat{\sigma}^2_\tau$. If we suspect that $\frac{\sigma^2_\tau}{\sigma^2_\epsilon}\approx0.5$, then the goal of this problem is to find $prob\left(\hat{\sigma}^2_\tau<0\right)$, when $n=10$ and $a=3$. If we suspect that $\frac{\sigma^2_\tau}{\sigma^2_\epsilon}\approx0.5$, then it follows that $2\sigma^2_\tau\approx\sigma^2_\epsilon$. We will use this to compute $prob\left(\hat{\sigma}^2_\tau<0\right)$. This calculation is shown below.
+\begin{align*}
+P\left(\hat{\sigma}^2_\tau<0\right) &= P\left(F_{3-1,3(10-1)}<\frac{2\sigma^2_\tau}{2\sigma^2_\tau+10\sigma^2_\tau}\right) \\
+&= P\left(F_{2,27}<\frac{2\sigma^2_\tau}{12\sigma^2_\tau}\right) \\
+&= P\left(F_{2,27}<\frac{1}{6}\right)
+\end{align*}
+As shown above, $P\left(\hat{\sigma}^2_\tau<0\right)=P\left(F_{2,27}<\frac{1}{6}\right)$. We will compute this probability in R below.
+
+```{r}
+# Compute the above probability:
+pf(1/6, 2, 27)
+```
+
+Hence, if we suspect that $\frac{\sigma^2_\tau}{\sigma^2_\epsilon}\approx0.5$, then $prob\left(\hat{\sigma}^2_\tau<0\right)$ when $n=10$ and $a=3$, is $0.1526541$.

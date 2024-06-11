@@ -1,0 +1,333 @@
+---
+title: "STAT 421 Homework 6"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Lecture 15 Problem 1a:** $\\$
+In order to estimate the parameters of the LSD model, we are supposed to differentiate $SS_E$ with respect to $\mu$, $\alpha_i$, $\tau_j$, $\beta_k$, and set the results to zero. However, because of the restricted sum the LSD introduces, we can't quite differentiate this $SS_E$, which is defined as follows: $SS_E=\sum^{'}_{ijk}\epsilon^2_{ijk}=\sum^{'}_{ijk}(y_{ijk}-\mu-\alpha_i-\tau_j-\beta_k)^2$. In this problem we are going to work with the following LSD.
+\[
+\begin{aligned}
+y_{ijk} &=
+\begin{pmatrix}
+y_{111} & y_{122} & y_{133} \\
+y_{221} & y_{232} & y_{213} \\
+y_{331} & y_{312} & y_{323} \\
+\end{pmatrix}
+\end{aligned}
+\]
+In particular, in this sub-part, we will write out the $\sum^{'}_{ijk}$ in $SS_E$ for the specific LSD shown above. This calculation is shown below.
+\begin{align*}
+SS_E &= \sum^{'}_{ijk}\epsilon^2_{ijk} \\
+&= \sum^{'}_{ijk}(y_{ijk}-\mu-\alpha_i-\tau_j-\beta_k)^2 \\
+&= (y_{111}-\mu-\alpha_1-\tau_1-\beta_1)^2+(y_{122}-\mu-\alpha_1-\tau_2-\beta_2)^2+(y_{133}-\mu-\alpha_1-\tau_3-\beta_3)^2 \\
+& \ +(y_{221}-\mu-\alpha_2-\tau_2-\beta_1)^2+(y_{232}-\mu-\alpha_2-\tau_3-\beta_2)^2+(y_{213}-\mu-\alpha_2-\tau_1-\beta_3)^2 \\
+& \ +(y_{331}-\mu-\alpha_3-\tau_3-\beta_1)^2+(y_{312}-\mu-\alpha_3-\tau_1-\beta_2)^2+(y_{323}-\mu-\alpha_3-\tau_2-\beta_3)^2
+\end{align*}
+
+**Lecture 15 Problem 1b:** $\\$
+In this sub-part, we will find the value associated with taking $\frac{\partial}{\partial\tau_2}$ on the $SS_E$ computed in sub-part a. This calculation is shown below.
+\begin{align*}
+\frac{\partial}{\partial\tau_2}SS_E &= \frac{\partial}{\partial\tau_2}\sum^{'}_{ijk}\epsilon^2_{ijk} \\
+&= \frac{\partial}{\partial\tau_2}(y_{111}-\mu-\alpha_1-\tau_1-\beta_1)^2+\frac{\partial}{\partial\tau_2}(y_{122}-\mu-\alpha_1-\tau_2-\beta_2)^2+\frac{\partial}{\partial\tau_2}(y_{133}-\mu-\alpha_1-\tau_3-\beta_3)^2 \\
+& \ +\frac{\partial}{\partial\tau_2}(y_{221}-\mu-\alpha_2-\tau_2-\beta_1)^2+\frac{\partial}{\partial\tau_2}(y_{232}-\mu-\alpha_2-\tau_3-\beta_2)^2+\frac{\partial}{\partial\tau_2}(y_{213}-\mu-\alpha_2-\tau_1-\beta_3)^2 \\
+& \ +\frac{\partial}{\partial\tau_2}(y_{331}-\mu-\alpha_3-\tau_3-\beta_1)^2+\frac{\partial}{\partial\tau_2}(y_{312}-\mu-\alpha_3-\tau_1-\beta_2)^2+\frac{\partial}{\partial\tau_2}(y_{323}-\mu-\alpha_3-\tau_2-\beta_3)^2 \\
+&= 0-2(y_{122}-\mu-\alpha_1-\tau_2-\beta_2)+0-2(y_{221}-\mu-\alpha_2-\tau_2-\beta_1)+0+0+0+0-2(y_{323}-\mu-\alpha_3-\tau_2-\beta_3)
+\end{align*}
+When solving for the parameter estimates, we set the derivatives equal to zero, which makes the leading coefficient trivial in the calculation. In our case, all nonzero terms have a $-2$ as the coefficient, hence we can remove this $-2$ in the calculation. This calculation is continued below.
+\begin{align*}
+\frac{\partial}{\partial\tau_2}SS_E &\propto y_{122}-\mu-\alpha_1-\tau_2-\beta_2+y_{221}-\mu-\alpha_2-\tau_2-\beta_1+y_{323}-\mu-\alpha_3-\tau_2-\beta_3 \\
+&= (y_{122}+y_{221}+y_{323})-(\mu+\mu+\mu)-(\alpha_1+\alpha_2+\alpha_3)-(\tau_2+\tau_2+\tau_2)-(\beta_1+\beta_2+\beta_3) \\
+&= y_{.2.}-3\mu-\alpha_{.}-3\tau_2-\beta_{.}
+\end{align*}
+Therefore, as shown above, $\frac{\partial}{\partial\tau_2}SS_E\propto y_{.2.}-3\mu-\alpha_{.}-3\tau_2-\beta_{.}$.
+
+**Lecture 15 Problem 2:** $\\$
+In this problem, we will see the importance of the orthogonality of the Greek and Latin squares in a GLSD. Consider the following GLSD
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+1 & 2 & 3 & 4 \\
+2 & 1 & 4 & 3 \\
+3 & 4 & 1 & 2 \\
+4 & 3 & 2 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+2 & 1 & 4 & 3 \\
+3 & 4 & 1 & 2 \\
+1 & 2 & 3 & 4 \\
+4 & 3 & 2 & 1 \\
+\end{pmatrix}
+\end{aligned}
+\]
+We will start by confirming that these two are orthogonal. This is done below.
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+12 & 21 & 34 & 43 \\
+23 & 14 & 41 & 32 \\
+31 & 42 & 13 & 24 \\
+44  & 33 & 22 & 11 \\
+\end{pmatrix}
+\end{aligned}
+\]
+Since all of these pairs are unique, our Greco-Latin Square is orthogonal.
+
+If we consider the above GLSD, where the model is $y_{ijkl}=\alpha_i+\beta_j+\gamma_k+\delta_l+\epsilon_{ijkl}$, the goal of this problem is to show that the cross-term $\sum^{'}_{ijkl}(\bar{y}_{.j..}\bar{y}_{....})(\bar{y}_{..k.}\bar{y}_{....})$ in the ANOVA
+decomposition, which can be rewritten as $\frac{1}{p^2}\left[\sum^{'}_{ijkl}y_{.j..}y_{..k.}-(y_{....})^2\right]$, is zero. This calculation is shown below.
+\begin{align*}
+\frac{1}{p^2}\left[\sum^{'}_{ijkl}y_{.j..}y_{..k.}-(y_{....})^2\right] &= \frac{1}{p^2}[y_{.1..}y_{..2.}+y_{.2..}y_{..1.}+y_{.3..}y_{..4.}+y_{.4..}y_{..3.}+y_{.2..}y_{..3.}+y_{.1..}y_{..4.}+y_{.4..}y_{..1.}+y_{.3..}y_{..2.} \\
+& \ \ \ \ \ +y_{.3..}y_{..1.}+y_{.4..}y_{..2.}+y_{.1..}y_{..3.}+y_{.2..}y_{..4.}+y_{.4..}y_{..4.}+y_{.3..}y_{..3.}+y_{.2..}y_{..2.}+y_{.1..}y_{..1.} \\
+& \ \ \ \ \ -(y_{....})^2] \\
+&= \frac{1}{p^2}[y_{.1..}(y_{..2.}+y_{..4.}+y_{..3.}+y_{..1.})+y_{.2..}(y_{..1.}+y_{..3.}+y_{..4.}+y_{..2.})  \\
+& \ \ \ \ \ +y_{.3..}(y_{..4.}+y_{..2.}+y_{..1.}+y_{..3.})+y_{.4..}(y_{..3.}+y_{..1.}+y_{..2.}+y_{..4.})-(y_{....})^2] \\
+&= \frac{1}{p^2}[y_{.1..}(y_{....})+y_{.2..}(y_{....})+y_{.3..}(y_{....})+y_{.4..}(y_{....})-(y_{....})^2] \\
+&=  \frac{1}{p^2}[(y_{.1..}+y_{.2..}+y_{.3..}+y_{.4..})(y_{....})-(y_{....})^2] \\
+&= \frac{1}{p^2}[(y_{....})(y_{....})-(y_{....})^2] \\
+&= \frac{1}{p^2}[(y_{....})^2-(y_{....})^2] \\
+&= 0
+\end{align*}
+Hence, as shown above, the cross-term $\sum^{'}_{ijkl}(\bar{y}_{.j..}\bar{y}_{....})(\bar{y}_{..k.}\bar{y}_{....})$ in the ANOVA
+decomposition, is zero.
+
+**Lecture 15 Problem 3:** $\\$
+In this problem, we will use the data from problem 4.36 in the textbook. In this experiment, an industrial engineer is investigating the effect of four assembly methods (A, B, C, D) on the assembly time for a color television component. Four operators are selected for
+the study. Furthermore, the engineer knows that each assembly method produces such fatigue that the time required for the last assembly may be greater than the time required for the
+first, regardless of the method. That is, a trend develops in the required assembly time. To account for this source of variability, the engineer uses the Latin square design shown below.
+
+```{r echo=F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("data11.png")
+```
+
+The engineer also suspects that the workplaces used by the four operators may represent an additional source of variation. A fourth factor, workplace
+($\alpha$, $\beta$, $\gamma$, $\delta$) may be introduced and another experiment conducted, yielding the Graeco-Latin square that follows.
+
+```{r echo=F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("data12.png")
+```
+
+The goal of this problem is to analyze the data from this experiment (using $\alpha=0.05$) and draw conclusions. We will do all of the analysis in R and then draw conclusions, this work in R is shown below.
+
+```{r}
+# Set up the number of each factor:
+num_a = num_b = num_c = num_d = p = 4
+
+# Set up an empty matrix for the data:
+y_mat <- matrix(nrow=num_a, ncol=num_b)
+
+# Fill in the matrix with the data from the problem:
+y_mat[1,] <- c(11, 10, 14, 8)
+y_mat[2,] <- c(8, 12, 10, 12)
+y_mat[3,] <- c(9, 11, 7, 15)
+y_mat[4,] <- c(9, 8, 18, 6)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Set up the factors to match the data:
+A <- as.factor(rep(1:num_a, each=num_b))
+B <- as.factor(rep(1:num_b, times=num_a))
+C <- as.factor(c(3, 2, 4, 1, 2, 3, 1, 4, 1, 4, 2, 3, 4, 1, 3, 2))
+D <- as.factor(c(2, 3, 4, 1, 1, 4, 3, 2, 4, 1, 2, 3, 3, 2, 1, 4))
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, D, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A+B+C+D))
+```
+
+As computed at the $5\%$ level of significance, since the p-value is greater than the significance level, we fail to reject the null and hence do not have evidence that C (the assembly method) has an effect on assembly time. As mentioned in the lecture, we may also cautiously conclude that there is no evidence that A (order of assembly), B (operator), and D (workplace) have an effect on assembly time. 
+
+**Lecture 16 Problem 1:** $\\$
+Considering the model $y_{ij}=\mu+\tau_i+\beta_j+\gamma_{ij}+\epsilon_{ij}$, as explained in class, $y_{ij}$ does not have enough degrees of freedom to estimate everything. In this problem, we will try to do it anyways. To do this we would begin by taking derivatives of $SS_E=\sum_{ij}(y_{ij}-\mu-\tau_i-\beta_j-\gamma_{ij})^2$, with respect to $\mu$, $\tau_i$, $\beta_j$, $\gamma_{ij}$, and setting the results to zero at $\hat{\mu}$, $\hat{\tau_i}$, $\hat{\beta_j}$, $\hat{\gamma_{ij}}$. Our goal is to show that the derivative with respect to $\gamma_{ij}$ leads to an equation which implies $\hat{\epsilon}_{ij}\equiv y_{ij}-\hat{y}_{ij}=0$. We will start by taking the derivative of $SS_E$ with respect to $\gamma_{ij}$, this is done below.
+\begin{align*}
+\frac{\partial}{\partial\gamma_{ij}}SS_E &= \frac{\partial}{\partial\gamma_{ij}}\sum_{ij}(y_{ij}-\mu-\tau_i-\beta_j-\gamma_{ij})^2 \\
+&= -2(y_{ij}-\mu-\tau_i-\beta_j-\gamma_{ij})
+\end{align*}
+We will now set this result to zero at $\hat{\mu}$, $\hat{\tau_i}$, $\hat{\beta_j}$, $\hat{\gamma_{ij}}$.
+\begin{align*}
+\frac{\partial}{\partial\gamma_{ij}}SS_E|_{\hat{\mu},\hat{\tau_i},\hat{\beta_j}, \hat{\gamma_{ij}}} &= 0 \\
+0 &= -2(y_{ij}-\hat{\mu}-\hat{\tau}_i-\hat{\beta}_j-\hat{\gamma}_{ij}) \\
+0 &= y_{ij}-\hat{\mu}-\hat{\tau}_i-\hat{\beta}_j-\hat{\gamma}_{ij}
+\end{align*}
+If we notice that $\hat{\epsilon}_{ij}=y_{ij}-\hat{\mu}-\hat{\tau}_i-\hat{\beta}_j-\hat{\gamma}_{ij}$, then the above equation states $\hat{\epsilon}_{ij}=0$, this is what we were trying to prove, and hence the calculations are over.
+
+**Lecture 16 Problem 2a:** $\\$
+In this problem, we are focusing on the full interactive model $y_{ijk}=\mu+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk}$. In this sub-part, we are going to show that the sample mean over $i,j,k$ of the predictions is equal to the sample mean over $i,j,k$ of the observations. This calculation is done below.
+\begin{align*}
+\bar{\hat{y}}_{...} &= \frac{1}{abn}\sum_{ijk}\hat{y}_{ijk} \\
+&= \frac{1}{abn}\sum_{ijk}\bar{y}_{ij.} \\
+&= \sum_{k}\frac{1}{abn}\sum_{ij}\bar{y}_{ij.} \\
+&= \frac{n}{abn}\cdot ab\bar{y}_{...} \\
+&= \bar{y}_{...}
+\end{align*}
+Hence we have shown that the sample mean over $i,j,k$ of the predictions is equal to the sample mean over $i,j,k$ of the observations.
+
+**Lecture 16 Problem 2b:** $\\$
+In this problem, we are focusing on the full interactive model $y_{ijk}=\mu+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk}$. In this sub-part, we are going to show that the sample mean over $i,j,k$ of the residuals is equal to zero. This calculation is done below.
+\begin{align*}
+\bar{\hat{\epsilon}}_{ijk} &= \frac{1}{abn}\sum_{ijk}(y_{ijk}-\hat{y}_{ijk}) \\
+&= \frac{1}{abn}\sum_{ijk}(y_{ijk}-\bar{y}_{ij.}) \\
+&= \frac{1}{abn}\left(\sum_{ijk}y_{ijk}-\sum_{ijk}\bar{y}_{ij.}\right) \\
+&= \frac{1}{abn}\left(abn\bar{y}_{...}-\sum_{k}ab\bar{y}_{...}\right) \\
+&= \frac{1}{abn}\left(abn\bar{y}_{...}-nab\bar{y}_{...}\right) \\
+&= \bar{y}_{...}-\bar{y}_{...} \\
+&= 0
+\end{align*}
+Hence we have shown that the sample mean over $i,j,k$ of the residuals is equal to zero.
+
+**Lecture 16 Problem 2c:** $\\$
+In this problem, we are focusing on the full interactive model $y_{ijk}=\mu+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk}$. In this sub-part, we are going to show that the sample covariance between the predictions and residuals, defined as $\frac{1}{abn}\sum_{ijk}(\hat{y}_{ijk}-\bar{\hat{y}}_{...})(\hat{\epsilon}_{ijk}-\bar{\hat{\epsilon}}_{...})$ is zero. This calculation is done below.
+\begin{align*}
+\frac{1}{abn}\sum_{ijk}(\hat{y}_{ijk}-\bar{\hat{y}}_{...})(\hat{\epsilon}_{ijk}-\bar{\hat{\epsilon}}_{...}) &= \frac{1}{abn}\sum_{ijk}(\hat{y}_{ijk}-\bar{y}_{...})(\hat{\epsilon}_{ijk}-0) \quad \text{(As shown in parts a and b)} \\
+&= \frac{1}{abn}\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{...})(\hat{\epsilon}_{ijk}) \\
+&= \frac{1}{abn}\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{...})(y_{ijk}-\hat{y}_{ijk}) \\
+&= \frac{1}{abn}\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{...})(y_{ijk}-\bar{y}_{ij.}) \\
+&= \frac{1}{abn}\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{...})y_{ijk}-\frac{1}{abn}\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{...})\bar{y}_{ij.} \\
+&= \frac{1}{ab}\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{...})\frac{1}{n}\sum_{k}y_{ijk}-\frac{n}{abn}\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{...})\bar{y}_{ij.} \\
+&= \frac{1}{ab}\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{...})\bar{y}_{ij.}-\frac{1}{ab}\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{...})\bar{y}_{ij.} \\
+&= 0
+\end{align*}
+Hence we have shown that the sample covariance between the predictions and residuals is zero.
+
+**Lecture 16 Problem 2d:** $\\$
+We are skipping this part of the problem, however, given its relative ease we will do it anyways. In this problem, we are focusing on the additive model $y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk}$. In this sub-part, we are going to show that the sample mean over $i,j,k$ of the predictions is equal to the sample mean over $i,j,k$ of the observations. This calculation is done below.
+\begin{align*}
+\bar{\hat{y}}_{...} &= \frac{1}{abn}\sum_{ijk}\hat{y}_{ijk} \\
+&= \frac{1}{abn}\sum_{ijk}(\bar{y}_{i..}+\bar{y}_{.j.}-\bar{y}_{...}) \\
+&= \frac{1}{abn}\left(\sum_{ijk}\bar{y}_{i..}+\sum_{ijk}\bar{y}_{.j.}-\sum_{ijk}\bar{y}_{...}\right) \\
+&= \frac{1}{abn}\left(bn\sum_{i}\bar{y}_{i..}+an\sum_{j}\bar{y}_{.j.}-abn\bar{y}_{...}\right) \\
+&= \frac{1}{abn}\left(bna\bar{y}_{...}+anb\bar{y}_{...}-abn\bar{y}_{...}\right) \\
+&= \bar{y}_{...}+\bar{y}_{...}-\bar{y}_{...} \\
+&= \bar{y}_{...}
+\end{align*}
+Hence we have shown that the sample mean over $i,j,k$ of the predictions is equal to the sample mean over $i,j,k$ of the observations.
+
+**Lecture 16 Problem 2e:** $\\$
+We are skipping this part of the problem, however, given its relative ease we will do it anyways. In this problem, we are focusing on the additive model $y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk}$. In this sub-part, we are going to show that the sample mean over $i,j,k$ of the residuals is equal to zero. This calculation is done below.
+\begin{align*}
+\bar{\hat{\epsilon}}_{ijk} &= \frac{1}{abn}\sum_{ijk}(y_{ijk}-\hat{y}_{ijk}) \\
+&= \frac{1}{abn}\sum_{ijk}(y_{ijk}-\bar{y}_{i..}-\bar{y}_{.j.}+\bar{y}_{...}) \\
+&= \frac{1}{abn}\left(\sum_{ijk}y_{ijk}-\sum_{ijk}\bar{y}_{i..}-\sum_{ijk}\bar{y}_{.j.}+\sum_{ijk}\bar{y}_{...}\right) \\
+&= \frac{1}{abn}\left(\sum_{ijk}y_{ijk}-bn\sum_{i}\bar{y}_{i..}-an\sum_{j}\bar{y}_{.j.}+abn\bar{y}_{...}\right) \\
+&= \frac{1}{abn}\left(abn\bar{y}_{...}-bna\bar{y}_{...}-anb\bar{y}_{...}+abn\bar{y}_{...}\right) \\
+&= \bar{y}_{...}-\bar{y}_{...}-\bar{y}_{...}+\bar{y}_{...} \\
+&= 0
+\end{align*}
+Hence we have shown that the sample mean over $i,j,k$ of the residuals is equal to zero.
+
+**Lecture 16 Problem 3a:** $\\$
+In this problem, we will consider the model $y_{ijk}=\mu+\alpha_i+(\alpha\beta)_{ij}+\epsilon_{ijk}$. In particular, this sub-part is focused on finding the least-squares equations of this model. In particular, we will begin by taking derivatives of $SS_E=\sum_{ijk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})^2$, with respect to $\mu$, $\alpha_i$, $(\alpha\beta)_{ij}$, and setting the results to zero at $\hat{\mu}$, $\hat{\alpha_i}$, $\hat{(\alpha\beta)}_{ij}$. We will start with the derivative of $SS_E$ with respect to $\mu$, which is calculated below.
+\begin{align*}
+\frac{\partial}{\partial\mu}SS_E &= \sum_{ijk}\frac{\partial}{\partial\mu}\epsilon^2_{ijk} \\
+&= \frac{\partial}{\partial\mu}\sum_{ijk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})^2 \\
+&= -2\sum_{ijk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})
+\end{align*}
+Setting this value equal to zero at $\hat{\mu}$, $\hat{\alpha}_i$, $\hat{(\alpha\beta)}_{ij}$, we obtain the following equation calculated below.
+\begin{align*}
+\frac{\partial}{\partial\mu}SS_E|_{\hat{\mu},\hat{\alpha_i},\hat{(\alpha\beta)}_{ij}} &= 0 \\
+0 &= -2\sum_{ijk}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= \sum_{ijk}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= y_{...}-abn\hat{\mu}-bn\hat{\alpha}_{.}-n\hat{(\alpha\beta)}_{..} \\
+0 &= \bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.}-\bar{\hat{(\alpha\beta)}}_{..}
+\end{align*}
+Hence as calculated above, our first normal equation is $\bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.}-\bar{\hat{(\alpha\beta)}}_{..}=0$. We will now take the derivative of $SS_E$ with respect to $\alpha_i$, which is calculated below.
+\begin{align*}
+\frac{\partial}{\partial\alpha_i}SS_E &= \sum_{ijk}\frac{\partial}{\partial\alpha_i}\epsilon^2_{ijk} \\
+&= \frac{\partial}{\partial\alpha_i}\sum_{ijk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})^2 \\
+&= -2\sum_{jk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})
+\end{align*}
+Setting this value equal to zero at $\hat{\mu}$, $\hat{\alpha}_i$, $\hat{(\alpha\beta)}_{ij}$, we obtain the following equation calculated below.
+\begin{align*}
+\frac{\partial}{\partial\alpha_i}SS_E|_{\hat{\mu},\hat{\alpha_i},\hat{(\alpha\beta)}_{ij}} &= 0 \\
+0 &= -2\sum_{jk}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= \sum_{jk}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= y_{i..}-bn\hat{\mu}-bn\hat{\alpha}_{i}-n\hat{(\alpha\beta)}_{i.} \\
+0 &= \bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.}
+\end{align*}
+Hence as calculated above, our second normal equation is $\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.}=0$. Lastly, we will take the derivative of $SS_E$ with respect to $(\alpha\beta)_{ij}$, which is calculated below.
+\begin{align*}
+\frac{\partial}{\partial(\alpha\beta)_{ij}}SS_E &= \sum_{ijk}\frac{\partial}{\partial(\alpha\beta)_{ij}}\epsilon^2_{ijk} \\
+&= \frac{\partial}{\partial(\alpha\beta)_{ij}}\sum_{ijk}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})^2 \\
+&= -2\sum_{k}(y_{ijk}-\mu-\alpha_i-(\alpha\beta)_{ij})
+\end{align*}
+Setting this value equal to zero at $\hat{\mu}$, $\hat{\alpha}_i$, $\hat{(\alpha\beta)}_{ij}$, we obtain the following equation calculated below.
+\begin{align*}
+\frac{\partial}{\partial(\alpha\beta)_{ij}}SS_E|_{\hat{\mu},\hat{\alpha_i},\hat{(\alpha\beta)}_{ij}} &= 0 \\
+0 &= -2\sum_{k}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= \sum_{k}(y_{ijk}-\hat{\mu}-\hat{\alpha}_i-\hat{(\alpha\beta)}_{ij}) \\
+0 &= y_{ij.}-n\hat{\mu}-n\hat{\alpha}_{i}-n\hat{(\alpha\beta)}_{ij} \\
+0 &= \bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}
+\end{align*}
+Hence as calculated above, our third normal equation is $\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}=0$.
+
+**Lecture 16 Problem 3b:** $\\$
+In this problem, we will state how many independent equations there are in part a. Starting off with equation 1, we see that $\bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.}-\bar{\hat{(\alpha\beta)}}_{..}=0$, is 1 independent equation. Moving onto our second equation, we see that $\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.}=0$, has $a-1$ independent equations because $\sum_i\left(\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.}\right)=0$ is exactly the first equation. Lastly, looking at our third equation, we see that $\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}=0$, has $ab-(a-1)-1$ independent equations, because $\sum_j\left(\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}\right)=0$ is exactly equation 2, and $\sum_i\sum_j\left(\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}\right)=0$ is exactly equation 1. Thus, in total, we have $1+a-1+ab-(a-1)-1=ab$ independent equations in part a.
+
+**Lecture 16 Problem 3c:** $\\$
+In this problem, given that the model has $ab+a+1$ parameters, our goal is to determine if the following constraints will be sufficient to estimate all of the parameters: $\alpha_{.}=0$ and $\alpha\beta_{i.}=0$.
+
+Since $\alpha_{.}=0$ is 1 additional independent equation, and $\alpha\beta_{i.}=0$ consists of $a$ additional independent equations, it follows that these two constraints combined give us $a+1$ additional independent equations. Hence we now have $ab+a+1$ independent equations, which is enough to estimate all of the parameters. In conclusion, the constraints, $\alpha_{.}=0$ and $\alpha\beta_{i.}=0$, are sufficient.
+
+**Lecture 16 Problem 3d:** $\\$
+In this problem, our goal is to write the degrees of freedom for each of the SS terms in the ANOVA decomposition: $SS_T=SS_A+SS_{AB}+SS_E$.
+
+Based on the definition of $SS_T$, it follows that $SS_T=\sum_{ijk}(y_{ijk}-\bar{y}_{ijk})^2$ has $abn-1$ degrees of freedom since there are $abn$ terms in the sum and the terms are subject to one constraint: $\sum_{ijk}(y_{ijk}-\bar{y}_{ijk})=0$. Furthermore, as discussed in lecture, the number of independent normal equations turns out to be the degrees of freedom in the various SS terms of the ANOVA decomposition, thus $SS_A$ has $a-1$ degrees of freedom, and $SS_{AB}$ has $ab-a$ degrees of freedom. Lastly, we learned in lecture that the degrees of freedom of $SS_T$ must equal the degrees of freedom of $SS_A+SS_{AB}+SS_E$. Hence we can use this fact to see that the degrees of freedom of $SS_E$ is $abn-1-a+1-ab+a=abn-ab=ab(n-1)$. In conclusion, the degrees of freedom for each of the SS terms in the ANOVA decomposition $SS_T=SS_A+SS_{AB}+SS_E$ are: $abn-1$, $a-1$, $ab-a$, and $ab(n-1)$, respectively.
+
+**Lecture 16 Problem 3e:** $\\$
+In this problem, using the constraints defined in part c, we will find the estimates of $\mu$, $\alpha_i$, and $(\alpha\beta)_{ij}$. As defined in part c, these constraints are $\alpha_{.}=0$ and $\alpha\beta_{i.}=0$.
+
+We will start by using the two constraints on our first equation, defined as $\bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.}-\bar{\hat{(\alpha\beta)}}_{..}=0$, and solve for the estimate for $\mu$. This calculation is done below,
+\begin{align*}
+\bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.}-\bar{\hat{(\alpha\beta)}}_{..} &= 0 \\
+\bar{y}_{...}-\hat{\mu}-\bar{\hat{\alpha}}_{.} &= 0 \quad \text{(Since $\alpha\beta_{i.}=0\implies \bar{(\alpha\beta)}_{..}=0$)} \\
+\bar{y}_{...}-\hat{\mu} &= 0 \quad \text{(Since $\alpha_{.}=0\implies\bar{\alpha}_{.}=0$)} \\
+\hat{\mu} &= \bar{y}_{...}
+\end{align*}
+Thus, as shown above, our estimate of $\mu$, using our two constraints is $\hat{\mu}=\bar{y}_{...}$.
+
+If we use the constraint $\alpha\beta_{i.}=0$, and our estimate of $\mu$ found above on the second equation, defined as $\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.}=0$, then we can solve for the estimate of $\alpha_{i}$. This calculation is shown below.
+\begin{align*}
+\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i}-\bar{\hat{(\alpha\beta)}}_{i.} &= 0 \\
+\bar{y}_{i..}-\hat{\mu}-\hat{\alpha}_{i} &= 0 \quad \text{(Since $\alpha\beta_{i.}=0 \implies \bar{(\alpha\beta)}_{i.}=0$)} \\
+\bar{y}_{i..}-\bar{y}_{...}-\hat{\alpha}_{i} &= 0 \quad \text{(Since $\hat{\mu}=\bar{y}_{...}$)} \\
+\hat{\alpha}_{i} &= \bar{y}_{i..}-\bar{y}_{...}
+\end{align*}
+Thus, as shown above, our estimate of $\alpha_i$, using our two constraints is $\hat{\alpha}_i=\bar{y}_{i..}-\bar{y}_{...}$.
+
+Lastly, if we use our estimates of $\mu$ and $\alpha_i$ found previously, then we can use the third equation, defined as $\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij}=0$, to find the estimate of $(\alpha\beta)_{ij}$. This calculation is done below.
+\begin{align*}
+\bar{y}_{ij.}-\hat{\mu}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij} &= 0 \\
+\bar{y}_{ij.}-\bar{y}_{...}-\hat{\alpha}_{i}-\hat{(\alpha\beta)}_{ij} &= 0 \quad \text{(Since $\hat{\mu}=\bar{y}_{...}$)}\\
+\bar{y}_{ij.}-\bar{y}_{...}-\bar{y}_{i..}+\bar{y}_{...}-\hat{(\alpha\beta)}_{ij} &= 0 \quad \text{(Since $\hat{\alpha}_i=\bar{y}_{i..}-\bar{y}_{...}$)} \\
+\bar{y}_{ij.}-\bar{y}_{i..}-\hat{(\alpha\beta)}_{ij} &= 0 \\
+\hat{(\alpha\beta)}_{ij} &= \bar{y}_{ij.}-\bar{y}_{i..}
+\end{align*}
+Thus, as shown above, our estimate of $(\alpha\beta)_{ij}$, using our two constraints is $\hat{(\alpha\beta)}_{ij}=\bar{y}_{ij.}-\bar{y}_{i..}$.
+
+Thus, in conclusion, the estimates of $\mu$, $\alpha_i$, and $(\alpha\beta)_{ij}$ are: $\bar{y}_{...}$, $\bar{y}_{i..}-\bar{y}_{...}$, and $\bar{y}_{ij.}-\bar{y}_{i..}$, respectively.
+
+**Lecture 16 Problem 3f:** $\\$
+In this problem, we will find expressions for $SS_A$, $SS_{AB}$, and $SS_E$ in terms of the $y_{ijk}$ found in part e. Furthermore, we will show that the cross-term $\sum_{ijk}(\bar{y}_{i..}-\bar{y}_{...})(\bar{y}_{ij.}-\bar{y}_{i..})$ is zero. We will start with finding the expressions for  $SS_A$, $SS_{AB}$, and $SS_E$ in terms of the $y_{ijk}$ below.
+
+It follows that we can write the deviations of the the observations from the grand mean as follows
+$$(y_{ijk}-\bar{y}_{...})=(\bar{y}_{i..}-\bar{y}_{...})+(\bar{y}_{ij.}-\bar{y}_{i..})+(y_{ijk}-\bar{y}_{ij.})$$
+Hence, it follows that the ANOVA decomposition is the following
+\begin{align*}
+\sum_{ijk}(y_{ijk}-\bar{y}_{...}) &= \sum_{ijk}(\bar{y}_{i..}-\bar{y}_{...})^2+\sum_{ijk}(\bar{y}_{ij.}-\bar{y}_{i..})^2+\sum_{ijk}(y_{ijk}-\bar{y}_{ij.})^2 \\
+&= bn\sum_{i}(\bar{y}_{i..}-\bar{y}_{...})^2+n\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{i..})^2+\sum_{ijk}(y_{ijk}-\bar{y}_{ij.})^2
+\end{align*}
+Of course, the ANOVA decomposition also include cross-terms, but we ignore those as they don't answer the main part of the question. Thus, in conclusion, $SS_A=bn\sum_{i}(\bar{y}_{i..}-\bar{y}_{...})^2$, $SS_{AB}=n\sum_{ij}(\bar{y}_{ij.}-\bar{y}_{i..})^2$, and $SS_E=\sum_{ijk}(y_{ijk}-\bar{y}_{ij.})^2$. Lastly, one of the cross-terms omitted from the ANOVA decomposition is $\sum_{ijk}(\bar{y}_{i..}-\bar{y}_{...})(\bar{y}_{ij.}-\bar{y}_{i..})$, we will show below that this term is indeed zero.
+\begin{align*}
+\sum_{ijk}(\bar{y}_{i..}-\bar{y}_{...})(\bar{y}_{ij.}-\bar{y}_{i..}) &= n\sum_{ij}(\bar{y}_{i..}-\bar{y}_{...})(\bar{y}_{ij.}-\bar{y}_{i..}) \\
+&= n\sum_{i}(\bar{y}_{i..}-\bar{y}_{...})\sum_{j}(\bar{y}_{ij.}-\bar{y}_{i..})
+\end{align*}
+Since $\sum_{j}(\bar{y}_{ij.}-\bar{y}_{i..})=0$, it follows that $\sum_{ijk}(\bar{y}_{i..}-\bar{y}_{...})(\bar{y}_{ij.}-\bar{y}_{i..})=0$, and hence the calculation is over.

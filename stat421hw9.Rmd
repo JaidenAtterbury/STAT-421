@@ -1,0 +1,274 @@
+---
+title: "STAT 421 Homework 9"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(AlgDesign)
+```
+
+**Lecture 22 Optional Problem:** $\\$
+Suppose we are planning on performing a $2^7$ design in 8 blocks. Furthermore, we have decided to generate the blocks with the 3 effects $ABC$, $DEF$, $BCFG$. Our goal in this problem is to find all of the effects that are confounded with block.
+
+As shown in lecture, to make $8$ blocks, we need $3$ effects $X$, $Y$, $Z$, to generate the blocks. Since $8$ blocks means $1$ block factor with $8$ levels, that implies that the df of the block factor is $8-1=7$. The $7$ treatment effects confounded with the $7$ block effects are: $X$, $Y$, $Z$, $XY$, $XZ$, $YZ$, $XYZ$. If we let $X=ABC$, $Y=DEF$, and $Z=BCFG$, then the 7 effects that are confounded with block, are shown below.
+\begin{align*}
+X &= ABC \\
+Y &= DEF \\
+Z &= BCFG \\
+XY &= ABCDEF \\
+XZ &= AFG \\
+YZ &= BCDEG \\
+XYZ &= ADEG
+\end{align*}
+Thus, as shown above, the 7 effects that are confounded with block are: $ABC$, $DEF$, $BCFG$, $ABCDEF$, $AFG$, $BCDEG$, and $ADEG$.
+
+**Lecture 22 Problem 1a:** $\\$
+Suppose an experiment involving four binary treatment factors is to be replicated twice, but we are unable to replicate all $2^4=16$ runs. Furthermore, if we suppose each block contains only 8 of the 16 runs, then the goal of this problem is to find the elements that must be in each of the blocks in order to confound the $ABC$ effect with block. We will use the $+/-$ table to do so. The $+/-$ table for a $2^4$ design is shown below.
+
+```{r echo=F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("hw8q5a.png")
+``` 
+
+As seen by the above $+/-$ table, we can split the $ABC$ effect into two groups, one where $ABC=-$, and one where $ABC=+$. This is shown below.
+\begin{align*}
+\text{ABC=-} &: \left[(1),\ ab,\ ac,\ bc,\ d,\ abd,\ acd,\ bcd\right] \\
+\text{ABC=+} &: \left[a,\ b,\ c,\ abc,\ ad,\ bd,\ cd,\ abcd\right]
+\end{align*}
+Thus, as can be seen above, the following blocks that are needed in order to confound the $ABC$ effect with block are shown below.
+\begin{align*}
+\text{Block 1} &: \left[(1),\ ab,\ ac,\ bc,\ d,\ abd,\ acd,\ bcd\right] \\
+\text{Block 2} &: \left[a,\ b,\ c,\ abc,\ ad,\ bd,\ cd,\ abcd\right]
+\end{align*}
+
+**Lecture 22 Problem 1b:** $\\$
+Now, if we suppose each block contains only 4 runs, and we choose to confound the $ABC$ and $ABD$ effects with block, then our goal for this problem is to write the elements in each of the blocks that are needed in order for this intended result to hold. In order to do this, we must first split by $ABC$ using the $+/-$ table above, this is done below.
+\begin{align*}
+\text{ABC=-} &: \left[(1),\ ab,\ ac,\ bc,\ d,\ abd,\ acd,\ bcd\right] \\
+\text{ABC=+} &: \left[a,\ b,\ c,\ abc,\ ad,\ bd,\ cd,\ abcd\right]
+\end{align*}
+Now, if we split by $ABD$ and consider the different $+/-$ combinations with $ABC$, we obtain the following four blocks shown below.
+\begin{align*}
+\text{Block 1} &: \left[(1),\ ab,\ acd,\ bcd\right] \\
+\text{Block 2} &: \left[ac,\ bc,\ d,\ abd\right] \\
+\text{Block 3} &: \left[c,\ abc,\ ad,\ bd\right] \\
+\text{Block 4} &: \left[a,\ b,\ cd,\ abcd\right]
+\end{align*}
+These four blocks include the treatment combinations that ensure the $ABC$ effect and the $ABD$ effect are confounded with the block effect.
+
+**Lecture 22 Problem 1c:** $\\$
+According to what we have learned, the $CD$ effect will also be confounded with block, this is because $ABC\times ABD=CD$. Our goal in this problem is to determine which block effect is confounded with the $CD$ effect. That is, we will find which combination of the block sums (denoted $B_1$, $B_2$, $B_3$, and $B_4$) that is equal to the $CD$ effect. As derived from the above $+/-$ table, the $CD$ effect written in Yates' notation (with the $n$ that represents replications omitted) is shown below.
+$$\text{CD effect}=\frac{1}{8}[(1)+a+b+ab-c-ac-bc-abc-d-ad-bd-abd+cd+acd+bcd+abcd]$$
+Looking at the above effects, we can see that, as expected, 8 of them have $+$ and 8 of them have $-$. Thus, we must choose the correct block effect to match these signs above. The block effect that does this is $\left[\frac{B_1+B_4}{2}-\frac{B_2+B_3}{2}\right]$. The proof that this block effect is confounded with the $CD$ effect is shown below.
+\begin{align*}
+\left[\frac{B_{1}+B_{4}}{2}-\frac{B_{2}+B_{3}}{2}\right] &= \frac{1}{2}\left[\frac{(1)+ab+acd+bcd}{4}+\frac{a+b+cd+abcd}{4}-\frac{ac+bc+d+abd}{4}-\frac{c+abc+ad+bd}{4}\right] \\
+&= \frac{1}{8}[(1)+ab+acd+bcd+a+b+cd+abcd-ac-bc-d-abd-c-abc-ad-bd] \\
+&= \frac{1}{8}[(1)+a+b+ab-c-ac-bc-abc-d-ad-bd-abd+cd+acd+bcd+abcd] \\
+&= \text{CD effect}
+\end{align*}
+Thus as shown above, with how we developed blocks in parts a and b, the block effect that is confounded with the $CD$ effect is $\left[\frac{B_1+B_4}{2}-\frac{B_2+B_3}{2}\right]$.
+
+**Lecture 22 Problem 1d:** $\\$
+In this problem, we will show which block effect is confounded with the $ABC$ effect. As derived from the above $+/-$ table, the $ABC$ effect written in Yates' notation (with the $n$ that represents replications omitted) is shown below.
+$$\text{ABC effect}=\frac{1}{8}[-(1)+a+b-ab+c-ac-bc+abc-d+ad+bd-abd+cd-acd-bcd+abcd]$$
+Looking at the above effects, we can see that, as expected, 8 of them have $+$ and 8 of them have $-$. Thus, we must choose the correct block effect to match these signs above. The block effect that does this is $\left[\frac{B_3+B_4}{2}-\frac{B_1+B_2}{2}\right]$. The proof that this block effect is confounded with the $ABC$ effect is shown below.
+\begin{align*}
+\left[\frac{B_{3}+B_{4}}{2}-\frac{B_{1}+B_{2}}{2}\right] &= \frac{1}{2}\left[\frac{c+abc+ad+bd}{4}+\frac{a+b+cd+abcd}{4}-\frac{(1)+ab+acd+bcd}{4}-\frac{ac+bc+d+abd}{4}\right] \\
+&= \frac{1}{8}[c+abc+ad+bd+a+b+cd+abcd-(1)-ab-acd-bcd-ac-bc-d-abd] \\
+&= \frac{1}{8}[-(1)+a+b-ab+c-ac-bc+abc-d+ad+bd-abd+cd-acd-bcd+abcd] \\
+&= \text{ABC effect}
+\end{align*}
+Thus as shown above, with how we developed blocks in parts a and b, the block effect that is confounded with the $ABC$ effect is $\left[\frac{B_3+B_4}{2}-\frac{B_1+B_2}{2}\right]$.
+
+**Lecture 22 Problem 1e:** $\\$
+In this problem, we will prove that a block effect of the type $(B_1+B_2+B_3-B_4)$ cannot be confounded with any effect. This explanation is written below.
+
+If we notice that the contrast in the above block effect is a non-zero-sum contrast, then that implies there will be an unequal amount of pluses and minuses in the equivalent contrast written in Yates' notation. However, we know that contrasts of effects written in Yates' notation must be zero-sum, thus this block effect isn't confounded with any effect. To further emphasize this point, we will show that this result holds with our four blocks in part b. This computation is shown below.
+\begin{align*}
+[B_{1}+B_{2}+B_{3}-B_{3}] &= \left[\frac{(1)+ab+acd+bcd}{4}+\frac{ac+bc+d+abd}{4}+\frac{c+abc+ad+bd}{4}-\frac{a+b+cd+abcd}{4}\right] \\
+&= \frac{1}{4}[(1)+ab+acd+bcd+ac+bc+d+abd+c+abc+ad+bd-a-b-cd-abcd] \\
+&= \frac{1}{4}[(1)-a-b+ab+c+ac+bc+abc+d+ad+bd+abd-cd+acd+bcd-abcd] \\
+\end{align*}
+The corresponding contrast vector for the above block effect written in Yates' notation is $[+,-,-,+,+,+,+,+,$ $+,+,+,+,-,+,+,-]$. Notice, this contrast vector has 12 $+$ signs and 4 $-$ signs, thus it does not represent the contrast vector of an effect since it is non-zero-sum.
+
+**Lecture 22 Problem 2a:** $\\$
+In this problem. we will consider the data from example 7.2. However, example 7.2 considers the experiment from example 6.2, so we will first describe that experiment and then make a few changes. In this experiment, a chemical product is produced in a pressure vessel. A factorial experiment is carried out in the pilot plant to study the factors thought to influence the filtration rate of
+this product. The four factors are temperature (A), pressure (B), concentration of formaldehyde (C), and stirring rate (D). Each factor is present at two levels. The response data obtained from a single replicate of the $2^4$ experiment are shown below.
+
+```{r echo=F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("data18.png")
+```
+
+Now, suppose that the $2^4=16$ treatment combinations cannot all be run using one batch of raw material. Furthermore, the experimenter can run eight treatment combinations from a single batch of material, so this experiment is a $2^4$ design confounded in two blocks. Lastly, it is logical to confound the highest order interaction $ABCD$ with blocks. The defining contrast is $L=A+C+B+D$. The data corresponding to this new experiment are shown below.
+
+```{r echo=F, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("data19.png")
+```
+
+In this sub-part, for the $2^4$ design with two complete blocks, we will re-run the code from the lecture for the blocked case, so that we can see all of the effects and SS values. This is done in R below.
+
+```{r message=F}
+# Set up the data:
+y = c(45, 71, 48, 65, 68, 60, 80, 65, 43, 100, 45, 104, 75, 86, 70, 96) 
+
+# Set up the factors to match the data:
+design = gen.factorial(2,4,varNames=c("A","B","C","D"), factors="all")
+attach(design)
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, D, y)
+```
+
+```{r warning=F}
+# Block factor (by hand):
+L <-  c(0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0) 
+
+# Block factor by contrast
+L <- as.factor((as.numeric(A)+as.numeric(B)+as.numeric(C)+as.numeric(D)) %% 2)
+
+# Compute the block effect (-1.375):
+block_effect <- mean(y[L==1]) - mean(y[L==0])
+
+# Define Helmert's contrast for use in model 1 (contr.sum gives same SS):
+contr = as.character("contr.helmert")
+
+# Create model 1:
+model_1 = lm(y ~ L + A*B*C*D,
+             contrasts = list(A=contr, B=contr, C=contr, D=contr, L=contr))
+
+# Correctly adjust the parameter estimates:
+eff <- 2*model_1$coef
+
+# Remove the grand mean:
+eff <- eff[2:length(eff)]
+
+# Obtain the sum of squares values from the ANOVA table:
+ss <- summary.aov(model_1) [[1]][,2]
+
+# Display the effects and sum of squares (ignore the last ss value):
+cbind(eff, ss)
+```
+
+Note that the sum of squares value is an artifact of $cbind()$; in reality, it's NA. By blocking so that $ABCD$ is confounded, we still get the same effects as above (i.e. without blocking). The only effect that is "lost" to confounding is the $ABCD$ effect itself.
+
+**Lecture 22 Problem 2b:** $\\$
+In this problem, we will produce estimates of the effects, and the SS values, for a full model involving the block factors. In other words, we will allow all possible block-treatment interactions as well. In our output, we will ignore the effects that are reported as NA in $lm()$. This is done in R below.
+
+```{r warning=F}
+# Create model 2:
+model_2 = lm(y ~ A*B*C*D*L,
+             contrasts = list(A=contr, B=contr, C=contr, D=contr, L=contr))
+
+# Correctly adjust the parameter estimates:
+eff <- 2*model_2$coef
+
+# Remove the grand mean:
+eff <- eff[2:length(eff)]
+
+# Obtain the sum of squares values from the ANOVA table:
+ss <- summary.aov(model_2) [[1]][,2]
+
+# Display the effects and sum of squares (ignore the last ss value):
+cbind(eff, ss)
+```
+
+Although we are ignoring the effects with NA, the above output contains the effects with NA for completeness.
+
+**Lecture 22 Problem 2c:** $\\$
+If we note that the SS values and the effects in parts a and b that do not involve the block factor are identical up to sign, which doesn't matter, then our goal in this problem is to give some explanation for these patterns. This explanation is written below.
+
+The reason why the SS values and the effects in parts a and b that do not involve the block factor are identical up to sign, which doesn't matter, is because the experimental design hasn't changed from parts a and b. In particular, since we are still considering a $2^4$ design, the number of effects/parameters that can be estimated is fixed at $2^4-1=15$. More importantly, since the block effect is confounded with the $ABCD$ effect, it follows that the block-treatment interactions that are being estimated are "exactly the same" as the treatment interactions being estimated. By "exactly the same," I mean that, in Yates' notation, these effects are computed identically, and hence lead to the same numerical value (up to a sign). Thus, combining these two explanations, we can see that part a and part b will both be computing $15$ effects that all have the same numerical value due to the confounding of the incomplete blocks.
+
+**Lecture 22 Problem 2d:** $\\$
+In this problem, we will now focus on the terms that do involve the block effect. These numerical values already appear in the results shown in the lecture, but the names associated with them are different. For example, $ABC$ in part a is replaced with $DL$ in part b. The goal of this problem is to explain why that is. This explanation is written below.
+
+As described in the setup portion of this problem, our experiment involves a $2^4$ design done in two blocks. Furthermore, we specifically set up the blocks so that the $ABCD$ effect was confounded with the block effect. This means that, the block effect, $L$, is written the same as the $ABCD$ effect in Yates' notation. Thus, using "magic," we can see that the $ABC$ in part a would be replaced by $DL=D(ABCD)=ABC$. This same logic explains why the $ABD$, $ACD$, and $BCD$ effects in part a are replaced with $CL$, $BL$, and $AL$ in part b.
+
+**Lecture 22 Problem 3a:** $\\$
+In this problem, we will consider the data from problem 6.26 in the textbook. In this problem, an experiment was run in a semiconductor fabrication plant in an effort to increase yield. Five factors, each at two levels, were studied. The factors (and levels) were A = aperture setting (small, large), B = exposure time (20% below nominal, 20% above nominal), C = development time (30 and 45s), D =
+mask dimension (small, large), and E = etch time (14.5 and 15.5min). The unreplicated $2^5$ design shown below was run.
+
+```{r echo=F, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("data20.png")
+```
+
+Our goal in this problem is to write R code to generate the ANOVA table for the full model. The code in R and the ANOVA table are shown below.
+
+```{r message=F}
+# Set up the data for the problem:
+y <- c(7, 9, 34, 55, 16, 20, 40, 60, 8, 10, 32, 50, 18, 21, 44, 61, 8, 12, 35,
+       52, 15 ,22, 45, 65, 6, 10, 30, 53, 15, 20, 41, 63)
+
+# Set up the factors to match the data:
+design <- gen.factorial(2,5,varNames=c("A","B","C","D","E"), factors="all")
+attach(design)
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, D, E, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A*B*C*D*E))
+```
+
+As can be seen from our full unreplicated $2^5$ factorial model, the sum of square and mean square of our error/residuals is missing (i.e. $SS_E$ and $MS_E$ are not included). Since the error of the residuals is missing, we cannot compute observed F statistics, p-values, and thus we can't test any of our main or interaction effects. The reason why $SS_E$ and $MS_E$ are missing can be seen by looking at the Df column of the ANOVA table. Since estimation of these effects takes up all of our degrees of freedom, this model simply does not have enough degrees of freedom to estimate and test all of them. Thus when we give all of our degrees of freedom to the parameters we want to estimate, there are no degrees of freedom left for the residuals, and hence no testing can be done.
+
+**Lecture 22 Problem 3b:** $\\$
+In this problem, we will write code in R to generate the ANOVA table for a full model (full in terms of interactions) involving four incomplete blocks such that the effects ABC and CDE (and consequently, ABDE) are confounded with block. The code in R and the ANOVA table are shown below.
+
+```{r}
+# Create the two vectors that correspond to confounding the ABC and CDE effect
+# with block effects:
+L1 <- as.factor((as.numeric(A)+as.numeric(B)+as.numeric(C)) %% 2)
+L2 <- as.factor((as.numeric(C)+as.numeric(D)+as.numeric(E)) %% 2)
+
+# Make a 4-level block factor L with the desired levels:
+L = numeric(16)
+L[L1==0 & L2==0] = 1
+L[L1==1 & L2==0] = 2
+L[L1==0 & L2==1] = 3
+L[L1==1 & L2==1] = 4
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, D, E, L, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~as.factor(L)+A*B*C*D*E))
+```
+
+As can be seen from our full $2^5$ factorial model involving four incomplete blocks such that the effects ABC and CDE (and consequently, ABDE) are confounded with block, the sum of square and mean square of our error/residuals is missing (i.e. $SS_E$ and $MS_E$ are not included). Since the error of the residuals is missing, we cannot compute observed F statistics, p-values, and thus we can't test any of our main or interaction effects. The reason why $SS_E$ and $MS_E$ are missing can be seen by looking at the Df column of the ANOVA table. Since estimation of these effects takes up all of our degrees of freedom, this model simply does not have enough degrees of freedom to estimate and test all of them. Thus when we give all of our degrees of freedom to the parameters we want to estimate, there are no degrees of freedom left for the residuals, and hence no testing can be done. This is the same problem we encountered in the last part.
+
+**Lecture 22 Problem 3c:** $\\$
+In this problem, we will compare the two ANOVA tables from parts a and b, and write down our observations. These observations are written down below.
+
+As can be seen from the two above ANOVA tables, all of the effects include the exact same degrees of freedom, sum of squares, and mean squares across both tables. However, there is a small difference between the two tables. In particular, in the second table, the $ABC$, $CDE$, and $BCDE$ effects are all missing due to the fact that they are confounded with block. This, in turn, led the block factor $L$ to have 3 degrees of freedom, and a sum of squares value of $14$, which is the same as $SS_{ABC}+SS_{CDE}+SS_{BCDE} \ (2+5+7)$, which could simply be a coincidence.
+
+**Lecture 23 Problem 1a:** $\\$
+In this problem, we will consider a $2^5$ design. Given that there are five factors ($A$, $B$, $C$, $D$, $E$), there are $2^5-1=31$ effects. The goal of this problem is to write out all of them in groups of 1-factor effects, 2-factor effects, etc. This grouping of the $31$ effects is done below.
+
+As discussed in lecture, there are $\binom{5}{1}=5$, 1-factor effects in a $2^5$ design, these effects are $A$, $B$, $C$, $D$, and $E$.
+
+As discussed in lecture, there are $\binom{5}{2}=10$, 2-factor effects in a $2^5$ design, these effects are $AB$, $AC$, $AD$, $AE$, $BC$, $BD$, $BE$, $CD$, $CE$, and $DE$.
+
+As discussed in lecture, there are $\binom{5}{3}=10$, 3-factor effects in a $2^5$ design, these effects are $ABC$, $ABD$, $ABE$, $ACD$, $ACE$, $ADE$, $BCD$, $BCE$, $BDE$, and $CDE$.
+
+As discussed in lecture, there are $\binom{5}{4}=5$, 4-factor effects in a $2^5$ design, these effects are $ABCD$, $ABCE$, $ABDE$, $ACDE$, and $BCDE$.
+
+As discussed in lecture, there is $\binom{5}{5}=1$, 5-factor effect in a $2^5$ design, this effect is $ABCDE$.
+
+Thus, as shown above, we have written out all $31$ effects in groups corresponding to the number of factors in each effect.
+
+**Lecture 23 Problem 1b:** $\\$
+In this problem, we will use the defining relation $ABCDE=1$ to write out the alias structure for a $2^{5-1}$ design. This defining relation is shown below.
+
+We will start with only multiplying over one of the letters from the word in the defining relation, these five relations are $A=BCDE$, $B=ACDE$, $C=ABDE$, $D=ABCE$, and $E=ABCD$.
+
+Now we will multiply over two of the letters from the word in the defining relation, these ten relations are $AB=CDE$, $AC=BDE$, $AD=BCE$, $AE=BCD$, $BC=ADE$, $BD=ACE$, $BE=ACD$, $CD=ABE$, $CE=ABD$, and $DE=ABC$.
+
+Thus, putting it all altogether, we can see that the alias structure for a $2^{5-1}$ design with the defining relation $ABCDE=1$ is: $A=BCDE$, $B=ACDE$, $C=ABDE$, $D=ABCE$, $E=ABCD$, $AB=CDE$, $AC=BDE$, $AD=BCE$, $AE=BCD$, $BC=ADE$, $BD=ACE$, $BE=ACD$, $CD=ABE$, $CE=ABD$, and $DE=ABC$.
+
+**Lecture 23 Problem 1c:** $\\$
+In this problem, we will list all of the estimable effects and count how many there are. As shown in lecture, we can find the all of the estimable effects from our alias structure. Hence it follows that the estimable effects are: $A+BCDE$, $B+ACDE$, $C+ABDE$, $D+ABCE$, $E+ABCD$, $AB+CDE$, $AC+BDE$, $AD+BCE$, $AE+BCD$, $BC+ADE$, $BD+ACE$, $BE+ACD$, $CD+ABE$, $CE+ABD$, and $DE+ABC$. As expected there are $2^{5-1}-1=15$ estimable effects in the $2^{5-1}$ design with the defining relation $ABCDE=1$.

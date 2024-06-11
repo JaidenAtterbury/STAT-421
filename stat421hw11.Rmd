@@ -1,0 +1,535 @@
+---
+title: "STAT 421 Homework 11"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("AlgDesign")
+```
+
+**Lecture 27 Problem 1a:** $\\$
+In this problem, we will consider the data from problem 13.1. In problem 13.1, an experiment was performed to investigate the capability of a measurement system. Ten parts were randomly selected, and two randomly selected operators measured each
+part three times. The tests were made in random order. The data for this experiment are shown below.
+
+```{r echo=F, out.width = "50%", fig.align = "center"}
+knitr::include_graphics("data22.png")
+```
+
+```{r echo=F, out.width = "50%", fig.align = "center"}
+knitr::include_graphics("data23.png")
+```
+
+The goal of this problem is to write code to run a "fixed effects" full model, and identify the numerical values of $MS_A$, $MS_B$, $MS_{AB}$, and $MS_E$. Note that in the code below, $A$ represents the part factor, $B$ represents the operator factor, and $R$ represents the replication factor. This is done in R below.
+
+```{r message=F}
+# Clear environment:
+rm(list=ls(all=TRUE))
+
+# Setup important value for the problem:
+n <- 3
+a <- 10
+b <- 2
+
+# Load in the data as a matrix:
+y_mat = matrix(c(50, 49, 50, 50, 48, 51, 52, 52, 51, 51, 51, 51, 53, 50, 50, 54,
+                 52, 51, 49, 51, 50, 48, 50, 51, 48, 49, 48, 48, 49, 48, 52, 50,
+                 50, 52, 50, 50, 51, 51, 51, 51, 50, 50, 52, 50, 49, 53, 48, 50,
+                 50, 51, 50, 51, 48, 49, 47, 46, 49, 46, 47, 48), ncol = 6, byrow=T)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Setup the factors for this experiment:
+design = gen.factorial(c(3,2,10), 3, varNames=c("R","B","A"), factors="all")
+attach(design)
+
+# Confirm that the data in R is the same as the problem:
+cbind(R, B, A, y)
+```
+
+```{r}
+# Create the full fixed effects model:
+model_1 <- lm(y~A*B)
+
+# Save the mean square values:
+MS_A <- summary.aov(model_1)[[1]][1,3]
+MS_B <- summary.aov(model_1)[[1]][2,3]
+MS_AB <- summary.aov(model_1)[[1]][3,3]
+MS_E <- summary.aov(model_1)[[1]][4,3]
+
+# Run ANOVA in R to get the results:
+summary.aov(model_1)
+```
+
+As seen above, the value of $MS_A$ is `r MS_A`, the value of $MS_B$ is `r MS_B`, the value of $MS_{AB}$ is `r MS_AB`, and the value of $MS_E$ is `r MS_E`.
+
+**Lecture 27 Problem 1b:** $\\$
+In this problem, using the $MS$ values from part a, we will do random effects modeling. In particular, we will compute the appropriate F-values and p-values for testing $H_0:\sigma^2_A=0,\:H_1:\sigma^2_A>0$, $H_0:\sigma^2_B=0,\:H_1:\sigma^2_B>0$, and $H_0:\sigma^2_{AB}=0,\:H_1:\sigma^2_{AB}>0$. This is done in R below.
+
+```{r}
+# Compute the degrees of freedom for each MS term:
+df_A <- a-1
+df_B <- b-1
+df_AB <- (a-1)*(b-1)
+df_E <- a*b*(n-1)
+
+# Compute the F-values for the corresponding F tests:
+F_A <- MS_A / MS_AB
+F_B <- MS_B / MS_AB
+F_AB <- MS_AB / MS_E
+
+# Compute the p-values for the corresponding F tests:
+p_val_a <- pf(F_A, df_A, df_AB, lower.tail=F)
+p_val_b <- pf(F_B, df_B, df_AB, lower.tail=F)
+p_val_ab <- pf(F_AB, df_AB, df_E, lower.tail=F)
+```
+
+As shown above, the F-value and p-value for testing $H_0:\sigma^2_A=0,\:H_1:\sigma^2_A>0$ was computed as `r F_A` and `r p_val_a`, the F-value and p-value for testing $H_0:\sigma^2_B=0,\:H_1:\sigma^2_B>0$ was computed as `r F_B` and `r p_val_b`, and the F-value and p-value for testing $H_0:\sigma^2_{AB}=0,\:H_1:\sigma^2_{AB}>0$ was computed as `r F_AB` and `r p_val_ab`.
+
+**Lecture 27 Problem 1c:** $\\$
+In this problem, for each of the above tests, we will use $\alpha=0.05$ and state our conclusions in English.
+
+For testing the competing hypotheses $H_0:\sigma^2_A=0,\:H_1:\sigma^2_A>0$, we obtained a p-value of `r p_val_a`. Therefore, at $\alpha=0.05$, we reject the null hypothesis and thus we have significant evidence that $\sigma^2_A>0$. This means that there is a difference in the capability of the measurement system across all parts in the population. In other words, this means that there is evidence of variability across all parts in the population.
+
+For testing the competing hypotheses $H_0:\sigma^2_B=0,\:H_1:\sigma^2_B>0$, we obtained a p-value of `r p_val_b`. Therefore, at $\alpha=0.05$, we fail to reject the null hypothesis and thus we do not have significant evidence that $\sigma^2_B>0$. This means that we have no evidence that there is a difference in the capability of the measurement system across all operators in the population. In other words, this means that there is no evidence of variability across all operators in the population.
+
+For testing the competing hypotheses $H_0:\sigma^2_{AB}=0,\:H_1:\sigma^2_{AB}>0$, we obtained a p-value of `r p_val_ab`. Therefore, at $\alpha=0.05$, we fail to reject the null hypothesis and thus we do not have significant evidence that $\sigma^2_{AB}>0$. This means that we have no evidence that the effect of all parts on the capability of the measurement system varies across all operators. In other words, there is no evidence of an interaction effect between all of parts and all of the operators.
+
+**Lecture 27 Problem 1d:** $\\$
+In this problem,using the formulas from the lecture, we will compute the estimates of the four variance components, and interpret them. This is done below.
+
+```{r}
+# Compute the four variance components:
+var_A <- (MS_A-MS_AB) / (n*b)
+var_B <- (MS_B-MS_AB) / (n*a)
+var_AB <- (MS_AB-MS_E) / n
+var_E <- MS_E
+```
+
+As calculated above, the estimated variance component for the $A$ term is `r var_A`, this component estimates the portion of total variability accounted for by the part factor. Also, the estimated variance component for the $B$ term is `r var_B`, this component estimates the portion of total variability accounted for by the operator factor. Next, the estimated variance component for the $AB$ interaction term is `r var_AB`, this component estimates the portion of total variability accounted for by the part-operator interaction. Lastly, the estimated variance component for the error term is `r var_E`, this component estimates the portion of total variability accounted for by random error. In general, a variance component is an estimate of the contribution that different experimental factors make to the overall variability of the data.
+
+**Lecture 27 Problem 1e:** $\\$
+In this problem, we will check if the sum of the four variance component estimates is approximately equal to the sample variance of all of the data, like it is supposed to be. This is done in R below.
+
+```{r}
+# Sample variance of the data:
+var_y <- var(y)
+
+# Add up all of the variance components:
+comp_sum <- var_A + var_B + var_AB + var_E
+```
+
+As calculated above, the sum of the estimated variance components is `r comp_sum`, this is pretty close to the sample variance which was calculated to be `r var_y`.
+
+**Lecture 27 Problem 2a:** $\\$
+In this problem, we will use the defining formulas for $\hat{\sigma}_\epsilon^2, \hat{\sigma}_\alpha^2, \dots$ to write
+
+\[
+\begin{bmatrix} 
+\hat{\sigma}_\epsilon^2 \\
+\hat{\sigma}_\alpha^2 \\
+\hat{\sigma}_{\beta}^2 \\
+\hat{\sigma}_{\alpha\beta}^2 \\
+\end{bmatrix} =
+\begin{bmatrix}
+\text{matrix of} \\
+\text{constants} \\
+\text{a, b, n}
+\end{bmatrix} 
+\begin{bmatrix}
+MS_E \\
+MS_A\\
+MS_B\\
+MS_{AB} 
+\end{bmatrix} 
+\]
+
+The defining formulas for $\hat{\sigma}_\epsilon^2, \hat{\sigma}_\alpha^2, \dots$ are written below
+\begin{align*}
+\hat{\sigma}^2_\epsilon &= MS_E \\
+\hat{\sigma}^2_\alpha &= \frac{1}{bn}[MS_A-MS_{AB}] \\
+\hat{\sigma}^2_\beta &= \frac{1}{an}[MS_B-MS_{AB}] \\
+\hat{\sigma}^2_{\alpha\beta} &= \frac{1}{n}[MS_{AB}-MS_E]
+\end{align*}
+We will now use these formulas to form the matrix equation above. This matrix equation with the coefficients matrix filled is shown below
+
+\[
+\begin{bmatrix} 
+\hat{\sigma}_\epsilon^2 \\
+\hat{\sigma}_\alpha^2 \\
+\hat{\sigma}_{\beta}^2 \\
+\hat{\sigma}_{\alpha\beta}^2 \\
+\end{bmatrix} =
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\\
+0 & \frac{1}{bn} & 0 & \frac{-1}{bn} \\\
+0 & 0 & \frac{1}{an} & \frac{-1}{an} \\\
+\frac{-1}{n} & 0 & 0 & \frac{1}{n} 
+\end{bmatrix} 
+\begin{bmatrix}
+MS_E \\
+MS_A\\
+MS_B\\
+MS_{AB} 
+\end{bmatrix} 
+\]
+
+**Lecture 27 Problem 2b:** $\\$
+In this problem, we will use the table of expected values to write
+
+\[
+\begin{bmatrix}
+E[MS_E] \\
+E[MS_A] \\
+E[MS_B] \\
+E[MS_{AB}]
+\end{bmatrix}  =
+\begin{bmatrix} 
+\text{matrix of} \\ 
+\text{constants} \\ 
+\text{a, b, n} 
+\end{bmatrix} 
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2 \\
+\end{bmatrix}
+\]
+
+The table of expected values is written below
+\begin{align*}
+E[MS_E] &= \sigma^2_\epsilon \\
+E[MS_A] &= \sigma^2_\epsilon+bn\sigma^2_\alpha+n\sigma^2_{\alpha\beta} \\
+E[MS_B] &= \sigma^2_\epsilon+an\sigma^2_\beta+n\sigma^2_{\alpha\beta} \\
+E[MS_{AB}] &= \sigma^2_\epsilon+n\sigma^2_{\alpha\beta}
+\end{align*}
+We will now use these formulas to form the matrix equation above. This matrix equation with the coefficients matrix filled is shown below
+
+\[
+\begin{bmatrix}
+E[MS_E] \\
+E[MS_A] \\
+E[MS_B] \\
+E[MS_{AB}]
+\end{bmatrix}  =
+\begin{bmatrix} 
+1 & 0 & 0 & 0 \\
+1 & bn & 0 & n \\
+1 & 0 & an & n \\
+1 & 0 & 0 & n
+\end{bmatrix}
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2 \\
+\end{bmatrix}
+\]
+
+**Lecture 27 Problem 2c:** $\\$
+In this problem, we will put it all together and show that
+
+\[
+E[\begin{bmatrix} 
+\hat{\sigma}_\epsilon^2 \\ 
+\hat{\sigma}_\alpha^2 \\
+\hat{\sigma}_{\beta}^2 \\
+\hat{\sigma}_{\alpha\beta}^2 \\
+\end{bmatrix}] =
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2
+\end{bmatrix}
+\]
+
+Using the derivation from part a, we can rewrite the left-hand-side of the above matrix equation as
+
+\[
+E[\begin{bmatrix}
+1 & 0 & 0 & 0 \\\
+0 & \frac{1}{bn} & 0 & \frac{-1}{bn} \\\
+0 & 0 & \frac{1}{an} & \frac{-1}{an} \\\
+\frac{-1}{n} & 0 & 0 & \frac{1}{n} 
+\end{bmatrix} 
+\begin{bmatrix}
+MS_E \\
+MS_A\\
+MS_B\\
+MS_{AB} 
+\end{bmatrix}]
+\]
+
+Furthermore, if use the fact that for any constant $c$, $E[cX]=cE[X]$, then we can take the coefficient matrix outside of the expectation operator and simplify the above expression to the following
+
+\[
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\\
+0 & \frac{1}{bn} & 0 & \frac{-1}{bn} \\\
+0 & 0 & \frac{1}{an} & \frac{-1}{an} \\\
+\frac{-1}{n} & 0 & 0 & \frac{1}{n} 
+\end{bmatrix} E[
+\begin{bmatrix}
+MS_E \\
+MS_A\\
+MS_B\\
+MS_{AB} 
+\end{bmatrix}]
+\]
+
+If we now bring the expectation operator inside of the $MS$ vector then we can rewrite the above expression as 
+
+\[
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\\
+0 & \frac{1}{bn} & 0 & \frac{-1}{bn} \\\
+0 & 0 & \frac{1}{an} & \frac{-1}{an} \\\
+\frac{-1}{n} & 0 & 0 & \frac{1}{n} 
+\end{bmatrix}
+\begin{bmatrix}
+E[MS_E] \\
+E[MS_A] \\
+E[MS_B] \\
+E[MS_{AB}] 
+\end{bmatrix}
+\]
+
+Using our derivation from part b, we can simplify the vector of expectations to the expression below
+
+\[
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\\
+0 & \frac{1}{bn} & 0 & \frac{-1}{bn} \\\
+0 & 0 & \frac{1}{an} & \frac{-1}{an} \\\
+\frac{-1}{n} & 0 & 0 & \frac{1}{n} 
+\end{bmatrix}
+\begin{bmatrix} 
+1 & 0 & 0 & 0 \\
+1 & bn & 0 & n \\
+1 & 0 & an & n \\
+1 & 0 & 0 & n
+\end{bmatrix}
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2 \\
+\end{bmatrix}
+\]
+
+Doing the matrix multiplication of the two coefficient matrices, we obtain the following expression shown below
+
+\[
+\begin{bmatrix} 
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2 \\
+\end{bmatrix}
+\]
+
+Since the resulting matrix from the above matrix multiplication is the identity matrix, it follows that our final result is the following vector
+
+\[
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2 \\
+\end{bmatrix}
+\]
+
+Hence we have shown that
+
+\[
+E[\begin{bmatrix} 
+\hat{\sigma}_\epsilon^2 \\ 
+\hat{\sigma}_\alpha^2 \\
+\hat{\sigma}_{\beta}^2 \\
+\hat{\sigma}_{\alpha\beta}^2 \\
+\end{bmatrix}] =
+\begin{bmatrix}
+\sigma_\epsilon^2 \\
+\sigma_\alpha^2 \\
+\sigma_{\beta}^2 \\
+\sigma_{\alpha\beta}^2
+\end{bmatrix}
+\]
+
+**Lecture 27 Problem 3:** $\\$
+In this problem, we will consider the two-factor random-effects model $y_{ijk}=\mu+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk}$ with $k=1,\dots,n$ replications. In particular, the goal of this problem is to show that $V[\bar{y}_{i..}]=\frac{1}{bn}E[MS_A]+\frac{1}{abn}E[MS_B]-\frac{1}{abn}E[MS_{AB}]$. To make the derivation easier we will use results already derived in class, namely that $y_{ijk}=\mu+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk}\implies\bar{y}_{i..}=\mu+\alpha_i+\bar{\beta}_{.}+\bar{(\alpha\beta)}_{i.}+\bar{\epsilon}_{i..}$. Furthermore, if we assume that $\alpha_i\perp\beta_j\perp(\alpha\beta)_{ij}\perp\epsilon_{ijk}$, then there we will be no covariance term in our calculation, as it will be zero. Lastly, since the model itself is built on the fact that $\alpha_i$, $\beta_j$, $(\alpha\beta)_{ij}$, and $\epsilon_{ijk}$ are all iid random variables, it follows that we can say $V[\alpha_i]=\sigma^2_\alpha$, $V[\beta_j]=\sigma^2_\beta$, $V[(\alpha\beta)_{ij}]=\sigma^2_{\alpha\beta}$, and $V[\epsilon_{ijk}]=\sigma^2_\epsilon$.
+
+The proof also relies on writing the variance components in terms of expected values, the formulas for doing so are shown below.
+\begin{align*}
+\sigma^2_\alpha &= \frac{1}{bn}(E[MS_A]-E[MS_{AB}]) \\
+\sigma^2_\beta &= \frac{1}{an}(E[MS_B]-E[MS_{AB}]) \\
+\sigma^2_{\alpha\beta} &= \frac{1}{n}(E[MS_{AB}]-E[MS_E]) \\
+\sigma^2_\epsilon &= MS_E
+\end{align*}
+Now that we have went through all of the assumptions and all of the formulas needed for the proof, we can now get to the proof itself. This is shown below.
+\begin{align*}
+V\left[\bar{y}_{i..}\right] &= V\left[\mu+\alpha_i+\bar{\beta}_{.}+\bar{(\alpha\beta)}_{i.}+\bar{\epsilon}_{i..}\right] \\
+&= V[\mu]+V[\alpha_i]+V\left[\bar{\beta}_{.}\right]+V\left[\bar{(\alpha\beta)}_{i.}\right]+V\left[\bar{\epsilon}_{i..}\right] \\
+&= 0+\sigma^2_\alpha+V\left[\frac{1}{b}\sum^b_j\beta_{j}\right]+V\left[\frac{1}{b}\sum^b_j(\alpha\beta)_{ij}\right]+V\left[\frac{1}{bn}\sum^b_j\sum^n_k\epsilon_{ijk}\right] \\
+&= \sigma^2_\alpha+\frac{1}{b}\sigma^2_\beta+\frac{1}{b}\sigma^2_{\alpha\beta}+\frac{1}{bn}\sigma^2_\epsilon \\
+&= \frac{1}{bn}(E[MS_A]-E[MS_{AB}])+\frac{1}{abn}(E[MS_B]-E[MS_{AB}])+\frac{1}{bn}(E[MS_{AB}]-E[MS_{E}])+\frac{1}{bn}MS_E \\
+&= \frac{1}{bn}E[MS_A]-\frac{1}{bn}E[MS_{AB}]+\frac{1}{abn}E[MS_B]-\frac{1}{abn}E[MS_{AB}]+\frac{1}{bn}E[MS_{AB}]-\frac{1}{bn}E[MS_{E}]+\frac{1}{bn}MS_E \\
+&= \frac{1}{bn}E[MS_A]+\frac{1}{abn}E[MS_B]-\frac{1}{abn}E[MS_{AB}]
+\end{align*}
+Hence, as shown above, we have shown that $V[\bar{y}_{i..}]=\frac{1}{bn}E[MS_A]+\frac{1}{abn}E[MS_B]-\frac{1}{abn}E[MS_{AB}]$.
+
+**Lecture 28 Problem 1** $\\$
+In this problem, we will find the $95\%$ confidence interval for $\sigma^2_\alpha$ in the two-factor random-effects model of example 13.1. As shown in lecture, to compute the approximate confidence interval for $\sigma^2_\alpha$ in the two-factor case, we will need to use the following formula
+$$\frac{r\hat{\sigma}^2_\alpha}{\chi^2_{\frac{\alpha}{2},\:r}}<\sigma^2_\alpha<\frac{r\hat{\sigma}^2_\alpha}{\chi^2_{1-\frac{\alpha}{2},\:r}}$$
+where $\chi^2_{\alpha/2,\:df}$ represents the appropriate critical value under the chi-squared distribution with $r$ degrees of freedom. Also, $\hat{\sigma}^2_\alpha$ and $r$ are defined as follows.
+\begin{align*}
+\hat{\sigma}^2_\alpha &= \frac{1}{bn}(MS_A-MS_{AB}) \\
+r &= \frac{(MS_A-MS_{AB})^2}{\frac{(MS_A)^2}{a-1}+\frac{(MS_{AB})^2}{(a-1)(b-1)}}
+\end{align*}
+As computed in lecture 27: $MS_A=62.391$, $MS_{AB}=0.712$, $a-1=19$, $(a-1)(b-1)=38$, and $\hat{\sigma}^2_\alpha=10.2798$. Putting this all together, we obtain the following value for $r$
+$$r=\frac{(62.391-0.712)^2}{\frac{(62.391)^2}{19}+\frac{(0.712)^2}{38}}=18.568\approx19$$
+Hence, as computed above, $r=19$. We will use this to compute our chi-squared critical values, this is done in R below.
+
+```{r}
+# Compute the ci-squared critical values for the confidence interval:
+upper_chi <- qchisq(1-0.05/2, 19, lower.tail=F)
+lower_chi <- qchisq(0.05/2, 19, lower.tail=F)
+```
+
+Hence, as computed above, our chi-squared critical values are $\chi^2_{\alpha/2,\:r}=$ `r lower_chi` and $\chi^2_{1-\alpha/2,\:r}=$ `r upper_chi`. Putting it altogether, our $95\%$ confidence interval for $\sigma^2_\alpha$ is
+$$\frac{19\cdot10.2798}{32.8523269}<\sigma^2_\alpha<\frac{19\cdot10.2798}{8.9065165}$$
+Simplifying this interval to three decimal places we obtain the final $95\%$ confidence interval for $\sigma^2_\alpha$ shown below
+$$5.94527750179<\sigma^2_\alpha<21.9295838053$$
+
+**Lecture 28 Problem 2** $\\$
+In this problem, for the three-factor random-effects model, we will find an approximate confidence interval for $\sigma^2_\alpha$ in terms of the various $MS$ values and their corresponding degrees of freedom. The derivation of this interval relies on the following linear combinations of the expectations of mean squares.
+\begin{align*}
+E[MS_A]+E[MS_{ABC}] &= 2\sigma^2_\epsilon+cn\sigma^2_{\alpha\beta}+bn\sigma^2_{\alpha\gamma}+2n\sigma^2_{\alpha\beta\gamma}+bcn\sigma^2_{\alpha} \\
+E[MS_{AB}]+E[MS_{AC}] &= 2\sigma^2_\epsilon+cn\sigma^2_{\alpha\beta}+bn\sigma^2_{\alpha\gamma}+2n\sigma^2_{\alpha\beta\gamma}
+\end{align*}
+The above linear combinations of the expectations of mean squares leads us to the following estimate of $\sigma^2_\alpha$, namely: $\hat{\sigma}^2_\alpha=[(MS_A+MS_{ABC})-(MS_{AB}+MS_{AC})]$. Furthermore, in 1946, Satterthwaite showed that $X^2=r\hat{\sigma}^2_\alpha/\sigma^2_\alpha$ is approximately distributed $\chi^2_r$. Where  $X^2$ is defined as
+\begin{align*}
+X^2 &= r\frac{(MS_1+MS_2+\dots)-(MS'_1+MS'_2+\dots)}{E[(MS_1+MS_2+\dots)-(MS'_1+MS'_2+\dots)]}
+\end{align*}
+And $r$ is defined as
+\begin{align*}
+r &= \frac{[(MS_1+MS_2+\dots)-(MS'_1+MS'_2+\dots)]^2}{\frac{MS^2_1}{df_1}+\frac{MS^2_2}{df_2}+\dots+\frac{MS'^2_1}{df'_1}+\frac{MS'^2_2}{df'_2}+\dots}
+\end{align*}
+Thus in our case, the approximate confidence interval for $\sigma^2_\alpha$ in terms of the various $MS$ values and their corresponding degrees of freedom can be written as follows
+$$\frac{r\hat{\sigma}^2_\alpha}{\chi^2_{\frac{\alpha}{2},\:r}}<\sigma^2_\alpha<\frac{r\hat{\sigma}^2_\alpha}{\chi^2_{1-\frac{\alpha}{2},\:r}}$$
+Where $\hat{\sigma}^2_\alpha=[(MS_A+MS_{ABC})-(MS_{AB}+MS_{AC})]$ and $r$ is written below as
+\begin{align*}
+r &= \frac{[(MS_A+MS_{ABC})-(MS_{AB}+MS_{AC})]^2}{\frac{MS^2_A}{a-1}+\frac{MS^2_{ABC}}{(a-1)(b-1)(c-1)}+\frac{MS^2_{AB}}{(a-1)(b-1)}+\frac{MS^2_{AC}}{(a-1)(c-1)}}
+\end{align*}
+
+**Lecture 28 Optional Problem a:** $\\$
+In this problem, we will consider the data from problem 5.8. In problem 5.8, the factors that influence the breaking strength of a synthetic fiber are being studied. Four production machines and three operators are chosen and a factorial experiment is run using fiber from the same production batch. The data for this experiment are shown below.
+
+```{r echo=F, out.width = "50%", fig.align = "center"}
+knitr::include_graphics("data24.png")
+```
+
+The goal of this problem is to treat both factors as fixed and report/interpret the p-values for testing the significance of each effect and their interaction. Note that in the code below, $A$ represents the machine factor, $B$ represents the operator factor, and $R$ represents the replication factor.This is done in R below.
+
+```{r message=F, warning=F}
+# Clear environment:
+rm(list=ls(all=TRUE))
+
+# Setup important value for the problem:
+n <- 2
+a <- 4
+b <- 3
+
+# Load in the data as a matrix:
+y_mat = matrix(c(109, 110, 108, 110, 110, 115, 109, 108, 110, 110, 111, 114, 112,
+                 111, 109, 112, 116, 112, 114, 120, 114, 115, 119, 117),
+               ncol = 4, byrow=T)
+
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Setup the factors for this experiment:
+design = gen.factorial(c(4, 2, 3), 3, varNames=c("A","R","B"), factors="all")
+attach(design)
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, R, B, y)
+```
+
+```{r}
+# Create the full fixed effects model:
+model_2 <- lm(y~A*B)
+
+# Run ANOVA in R to get the results:
+summary.aov(model_2)
+```
+
+As seen above, the $A$ effect (machine effect) had a p-value of $0.388753$, hence at the $5\%$ level of significance, we fail to reject the null hypothesis and conclude that there is no significant evidence that the mean breaking strength of a synthetic fiber varies across the four machines.
+
+Similarly, the $B$ effect (operator effect) had a p-value of $0.000117$, hence at the $5\%$ level of significance, we reject the null hypothesis and conclude that there is significant evidence that the mean breaking strength of a synthetic fiber varies across the three operators.
+
+Lastly, the $AB$ interaction effect (machine-operator interaction effect) had a p-value of $0.150681$, hence at the $5\%$ level of significance, we fail to reject the null hypothesis and conclude that there is no significant evidence that the effect of the four machines on the mean breaking strength of a synthetic fiber varies across the three operators. In other words, there is no evidence of an interaction between the four machines and the three operators.
+
+**Lecture 28 Optional Problem b:** $\\$
+In this problem, we will treat both factors as random and report/interpret the p-values for testing the significance of each effect and their interaction. This is done in R below.
+
+```{r}
+# Save the mean square values:
+MS_A <- summary.aov(model_2)[[1]][1,3]
+MS_B <- summary.aov(model_2)[[1]][2,3]
+MS_AB <- summary.aov(model_2)[[1]][3,3]
+MS_E <- summary.aov(model_2)[[1]][4,3]
+
+# Compute the degrees of freedom for each MS term:
+df_A <- a-1
+df_B <- b-1
+df_AB <- (a-1)*(b-1)
+df_E <- a*b*(n-1)
+
+# Compute the F-values for the corresponding F tests:
+F_A <- MS_A / MS_AB
+F_B <- MS_B / MS_AB
+F_AB <- MS_AB / MS_E
+
+# Compute the p-values for the corresponding F tests:
+p_val_a <- pf(F_A, df_A, df_AB, lower.tail=F)
+p_val_b <- pf(F_B, df_B, df_AB, lower.tail=F)
+p_val_ab <- pf(F_AB, df_AB, df_E, lower.tail=F)
+```
+
+For testing the competing hypotheses $H_0:\sigma^2_A=0,\:H_1:\sigma^2_A>0$, we obtained a p-value of `r p_val_a`. Therefore, at $\alpha=0.05$, we fail to reject the null hypothesis and thus we do not have significant evidence that $\sigma^2_A>0$. This means that we have no significant evidence that the mean breaking strength of a synthetic fiber varies across all machines in the population.
+
+For testing the competing hypotheses $H_0:\sigma^2_B=0,\:H_1:\sigma^2_B>0$, we obtained a p-value of `r p_val_b`. Therefore, at $\alpha=0.05$, we reject the null hypothesis and thus we have significant evidence that $\sigma^2_B>0$. This means that we have significant evidence that the mean breaking strength of a synthetic fiber varies across all operators in the population.
+
+For testing the competing hypotheses $H_0:\sigma^2_{AB}=0,\:H_1:\sigma^2_{AB}>0$, we obtained a p-value of `r p_val_ab`. Therefore, at $\alpha=0.05$, we fail to reject the null hypothesis and thus we do not have significant evidence that $\sigma^2_{AB}>0$. This means that we have no evidence that the effect of all of the machines on the mean breaking strength of a synthetic fiber varies across all operators. In other words, there is no evidence of an interaction between all of machines and all of operators.
+
+**Lecture 28 Optional Problem c:** $\\$
+In this problem, we will treat operator as random, but machine as fixed and report/interpret the p-values for testing the significance of each effect and their interaction. This is done in R below.
+
+```{r}
+# Compute the F-values for the corresponding F tests:
+F_A <- MS_A / MS_AB
+F_B <- MS_B / MS_E
+F_AB <- MS_AB / MS_E
+
+# Compute the p-values for the corresponding F tests:
+p_val_a <- pf(F_A, df_A, df_AB, lower.tail=F)
+p_val_b <- pf(F_B, df_B, df_E, lower.tail=F)
+p_val_ab <- pf(F_AB, df_AB, df_E, lower.tail=F)
+```
+
+For testing the $A$ effect (machine effect) we computed a p-value of `r p_val_a`, hence at the $5\%$ level of significance, we fail to reject the null hypothesis and conclude that there is no significant evidence that the mean breaking strength of a synthetic fiber varies across the four machines.
+
+For testing the competing hypotheses $H_0:\sigma^2_B=0,\:H_1:\sigma^2_B>0$, we obtained a p-value of $0.00011667$. Therefore, at $\alpha=0.05$, we reject the null hypothesis and thus we have significant evidence that $\sigma^2_B>0$. This means that we have significant evidence that the mean breaking strength of a synthetic fiber varies across all operators in the population.
+
+For testing the competing hypotheses $H_0:\sigma^2_{AB}=0,\:H_1:\sigma^2_{AB}>0$, we obtained a p-value of `r p_val_ab`. Therefore, at $\alpha=0.05$, we fail to reject the null hypothesis and thus we do not have significant evidence that $\sigma^2_{AB}>0$. This means that we have no evidence that the effect of the four machines on the mean breaking strength of a synthetic fiber varies across all operators. In other words, there is no evidence of an interaction between the four machines and all of the operators.

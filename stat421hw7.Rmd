@@ -1,0 +1,209 @@
+---
+title: "STAT 421 Homework 7"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(AlgDesign)
+```
+
+**Lecture 17 Problem 1:** $\\$
+In this problem, we will be using the data from problem 5.23 in the textbook. Problem 5.23 states that we will consider the data in Problem 5.8 assuming that replicates are blocks. In this experiment, the factors that influence the breaking strength of a synthetic fiber are being studied. Four production machines and three operators are chosen and a factorial experiment is run using fiber from the same production batch. The data from this experiment are shown below.
+
+```{r echo=F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("data13.png")
+```
+
+The goal of this problem is to produce the ANOVA table, and state our conclusions (using $\alpha=0.05$). We will do all of the analysis in R and then draw conclusions, this work in R is shown below.
+
+```{r message=F}
+# Set up the number of each factor:
+num_a <- 3
+num_b <- 4
+num_c <- 2
+
+# Set up an empty matrix for the data:
+y_mat <- matrix(nrow=num_a*num_c, ncol=num_b)
+
+# Fill in the matrix with the data from the problem:
+y_mat[1,] <- c(109, 110, 108, 110)
+y_mat[2,] <- c(110, 115, 109, 108)
+y_mat[3,] <- c(110, 110, 111, 114)
+y_mat[4,] <- c(112, 111, 109, 112)
+y_mat[5,] <- c(116, 112, 114, 120)
+y_mat[6,] <- c(114, 115, 119, 117)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Set up the factors to match the data:
+A <- as.factor(rep(1:num_a, each=num_b*num_c))
+B <- as.factor(rep(1:num_b, times=num_a*num_c))
+C <- as.factor(rep(rep(1:num_c, each=num_b), times=num_a))
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A+B+C+A:B))
+```
+
+As computed above, since the p-value of 0.000204 is less than the significance level of 0.05, we reject the null in favor of the alternative and conclude that the factor A (the operator) does effect the breaking strength of a synthetic fiber. Furthermore, since the p-value of 0.408659 is greater than the significance level of 0.05, we fail to reject the null in favor of the alternative and conclude that their is no evidence that the factor B (the machine) effects the breaking strength of a synthetic fiber. Also, since the p-value of 0.171630 is greater than the significance level of 0.05, we fail to reject the null in favor of the alternative and conclude that their is no evidence of an interaction effect between the two treatments A and B. Lastly, since the p-value of 0.487209 is greater than the significance level of 0.05, we fail to reject the null in favor of the alternative and cautiously conclude that the there is no block effect.
+
+**Lecture 17 Problem 2a:** $\\$
+In this problem, we will be using the data from example 9.1 in the textbook. In this experiment, a machine is used to fill 5-gallon metal containers with soft drink syrup. The variable of interest is the amount of syrup loss due to frothing. Three factors are thought to influence frothing: the nozzle design (A), the filling speed (B), and the operating pressure (C). Three nozzles, three filling speeds, and three pressures are chosen, and two replicates of a $3^3$ factorial experiment are run. The data are shown below.
+
+```{r echo=F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("data14.png")
+```
+
+Considering only the first replicate, the goal of this problem is to fit a model that includes at most 2-way interactions, produce the ANOVA table, and state our conclusions (using $\alpha=0.05$). In the end we want to discover which effects are significant, and which are not. We will do all of the analysis in R and then draw conclusions, this work in R is shown below.
+
+```{r message=F}
+# Set up the number of each factor:
+num_a <- 3
+num_b <- 3
+num_c <- 3
+
+# Set up an empty matrix for the data:
+y_mat <- matrix(nrow=num_a, ncol=num_b*num_c)
+
+# Fill in the matrix with the data from the problem:
+y_mat[1,] <- c(-35, -45, -40, 17, -65, 20, -39, -55, 15)
+y_mat[2,] <- c(110, -10, 80, 55, -55, 110, 90, -28, 110)
+y_mat[3,] <- c(4, -40, 31, -23, -64, -20, -30, -61, 54)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Set up the factors to match the data:
+A <- as.factor(rep(rep(1:num_a, each=num_b), times=num_c))
+B <- as.factor(rep(1:num_b, times=num_a*num_c))
+C <- as.factor(rep(1:num_c, each=num_a*num_b))
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A*B + A*C + B*C))
+```
+
+As calculated above, at the $5\%$ level of significance, there appears to be a B effect (speed effect), C effect (pressure effect), and lastly an interaction between treatment B and treatment C (a speed-pressure interaction). On the other hand, we have no evidence to suggest that there exists an A effect (nozzle effect), an interaction between treatment A and treatment B, and lastly an interaction between treatment A and treatment C.
+
+**Lecture 17 Problem 2b:** $\\$
+In this part of the problem, we will consider only the portion of the data that would follow if we had followed a Latin Square Design, of the form
+\[
+\begin{aligned}
+&\begin{pmatrix}
+3 & 1 & 2 \\
+2 & 3 & 1 \\
+1 & 2 & 3 \\
+\end{pmatrix}
+\end{aligned}
+\]
+Where the factor A is on the columns and factor B is on the rows (each with 3 levels). Our goal in this problem is to develop an additive model, produce the ANOVA table, and state our conclusions (using $\alpha=0.05$). In the end we want to discover which effects are significant, and which are not. We will do all of the analysis in R and then draw conclusions, this work in R is shown below.
+
+```{r}
+# Set up the number of each factor:
+p <- 3
+
+# Set up an empty matrix for the data:
+y_mat <- matrix(nrow=p, ncol=p)
+
+# Fill in the matrix with the data from the problem:
+y_mat[1,] <- c(4, 17, 90)
+y_mat[2,] <- c(-10, -64, -55)
+y_mat[3,] <- c(-40, 110, 54)
+
+# Make the data into a vector (in row order):
+y <- as.vector(t(y_mat))
+
+# Set up the factors to match the data:
+A <- as.factor(rep(1:p, times=p))
+B <- as.factor(rep(1:p, each=p))
+C <- as.factor(c(3, 1, 2, 2, 3, 1, 1, 2, 3))
+
+# Confirm that the data in R is the same as the problem:
+cbind(A, B, C, y)
+```
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A+B+C))
+```
+
+As calculated above, at the $5\%$ level of significance, none of the p-values are below this threshold and hence we have no evidence to suggest that there exists an A effect (nozzle effect), a B effect (speed effect), or a C effect (pressure effect). However, like the model above, the smallest p-values/most significant factors are owned by the factors B and C (both significant under a significance-level of 0.1).
+
+**Lecture 17 Problem 2c:** $\\$
+In this part of the problem, for the LSD above, we will consider a model that includes $A+B+C$ but also a single 2-way interaction term. Furthermore, we will develop the model and produce
+the ANOVA table. From there we will state what comments we can make about this table. Since the two factors that were the most significant in the LSD above were B and C, it makes sense to include the BC interaction term as our single two-way interaction term in our new model. The ANOVA calculations are done in R below.
+
+```{r}
+# Run ANOVA in R to get the results:
+summary.aov(lm(y~A+B+C+B:C))
+```
+
+As can be seen from our LSD model with a two-way interaction term, the sum of square and mean square of our error/residuals is missing (i.e. $SS_E$ and $MS_E$ are not included). Since the error of the residuals is missing, we cannot compute observed F statistics, p-values, and thus we can't test any of our main or interaction effects. The reason why $SS_E$ and $MS_E$ are missing can be seen by looking at the Df column of the ANOVA table. Since estimation of these effects takes up all of our degrees of freedom, this model simply does not have enough degrees of freedom to estimate and test all of them. Thus when we give all of our degrees of freedom to the parameters we want to estimate, there are no degrees of freedom left for the residuals, and hence no testing can be done.
+
+**Lecture 18 Problem 1:** $\\$
+For the full model involving two factors $A$, $B$, if we consider the $A$ effect, the $B$ effect, and the interaction effect, all written in Yates' notation, we showed in class that the product of the contrast vector for $A$, and for $B$, is equal to the contrast vector of the interaction effect. In this problem, we will show that the product of the main effect for $A$, and for $B$, is not equal to the interaction effect.
+
+As shown in class, for a $2^2$ design, the $A$ main effect is written in Yates' notation as $\frac{1}{2n}\left[-(1)+a-b+ab\right]$, the $B$ main effect is written in Yates' notation as $\frac{1}{2n}\left[-(1)-a+b+ab\right]$, and lastly the $AB$ interaction effect is written in Yates' notation as $\frac{1}{2n}\left[(1)-a-b+ab\right]$. We will now show that the product of the $A$ main effect with the $B$ main effect is not equal to the $AB$ interaction effect. This calculation is shown below.
+\begin{align*}
+\text{A effect $\cdot$ B effect} &= \frac{1}{2n}\left[-(1)+a-b+ab\right]\cdot\frac{1}{2n}\left[-(1)-a+b+ab\right] \\
+&= \frac{1}{4n^2}[(1)^2+(1)\cdot a-(1)\cdot b-(1)\cdot ab-a\cdot(1)-a^2+a\cdot b+a\cdot ab+b\cdot(1)+b\cdot a-b^2 \\
+& \ \ \ \ \ \ \ \ \ -b\cdot ab-ab\cdot(1)-ab\cdot a+ab\cdot b +(ab)^2] \\
+&= \frac{1}{4n^2}\left[(1)^2-2(1)(ab)-a^2+2(a)(b)-b^2+(ab)^2\right] \\
+&= \frac{1}{4n^2}\left[(1)^2-2(1)(ab)+(ab)^2-a^2+2(a)(b)-b^2\right] \\
+&= \frac{1}{4n^2}\left[(ab-(1))^2-(a-b)^2\right]
+\end{align*}
+As seen above, we get that the $AB$ interaction effect is written in Yates' notation as $\frac{1}{4n^2}\left[(ab-(1))^2-(a-b)^2\right]$, however, we have already shown that the $AB$ interaction effect is actually written in Yates' notation as $\frac{1}{2n}\left[(1)-a-b+ab\right]$. Hence we can see that these two terms are not equal to each other, and thus the product of the main effect for $A$, and for $B$, is not equal to the interaction effect.
+
+**Lecture 18 Problem 2a:** $\\$
+As shown in class, the two ways of computing effects are: the differences of 2 averages over $y$, and the difference of conditional effects. For example, in a $2^3$ design, the $A$ effect is computed as $(\text{avg. y|A=+})-(\text{avg. y|A=-})$ which is the same as computing $\frac{1}{2}\left[(A|B=+)+(A|B=-)\right]$. Furthermore, the $AB$ effect is computed as $(\text{avg. y|one diagonal})-(\text{avg. y|the other diagonal)}$ which is the same as computing $\frac{1}{2}\left[(A|B=+)-(A|B=-)\right]$.
+
+In this problem, using the fact that the $ABC$ effect can be defined, similarly, in terms of effects as $\frac{1}{2}\left[(AB|C=+)-(AB|C=-)\right]$, we will write the $ABC$ effect in Yates' notation. This calculation is shown below.
+\begin{align*}
+\text{ABC Effect} &= \frac{1}{2}\left[(AB|C=+)-(AB|C=-)\right] \\
+&= \frac{1}{2}\left[\frac{1}{2}\left[(A|B=+)-(A|B=-)|C=+\right]-\frac{1}{2}\left[(A|B=+)-(A|B=-)|C=-\right]\right] \\
+&= \frac{1}{4}\left[(A|B=+,C=+)-(A|B=-,C=+)-(A|B=+,C=-)+(A|B=-,C=-)\right] \\
+&= \frac{1}{4n}\left[(abc-bc)-(ac-c)-(ab-b)+(a-(1))\right] \\
+&= \frac{1}{4n}\left[abc-bc-ac+c-ab+b+a-(1)\right] \\
+&= \frac{1}{4n}\left[-(1)+a+b-ab+c-ac-bc+abc\right]
+\end{align*}
+Hence, as shown above, the $ABC$ effect in Yates' notation is computed as $\frac{1}{4n}\left[-(1)+a+b-ab+c-ac-bc+abc\right]$.
+
+**Lecture 18 Problem 2b:** $\\$
+In this problem, using the fact that the $CBA$ effect can be defined, similarly, in terms of effects as $\frac{1}{2}\left[(CB|A=+)-(CB|A=-)\right]$, we will write the $CBA$ effect in Yates' notation. This calculation is shown below.
+\begin{align*}
+\text{CBA Effect} &= \frac{1}{2}\left[(CB|A=+)-(CB|A=-)\right] \\
+&= \frac{1}{2}\left[\frac{1}{2}\left[(C|B=+)-(C|B=-)|A=+\right]-\frac{1}{2}\left[(C|B=+)-(C|B=-)|A=-\right]\right] \\
+&= \frac{1}{4}\left[(C|B=+,A=+)-(C|B=-,A=+)-(C|B=+,A=-)+(C|B=-,A=-)\right] \\
+&= \frac{1}{4n}\left[(abc-ab)-(ac-a)-(bc-b)+(c-(1))\right] \\
+&= \frac{1}{4n}\left[abc-ab-ac+a-bc+b+c-(1)\right] \\
+&= \frac{1}{4n}\left[-(1)+a+b-ab+c-ac-bc+abc\right]
+\end{align*}
+Hence, as shown above, the $CBA$ effect in Yates' notation is computed as $\frac{1}{4n}\left[-(1)+a+b-ab+c-ac-bc+abc\right]$. This is the same as the $ABC$ effect in Yates' notation, as expected.
+
+**Lecture 18 Problem 3a:** $\\$
+In class, for a $2^3$ design, we were able to write the $A$ effect, $AB$ effect, and $ABC$ effect in Yates' notation. In this problem, using the two methods for computing effects, we will write the $BC$ effect in Yates' notation. This calculation is shown below.
+\begin{align*}
+\text{BC Effect} &= \frac{1}{2}\left[(B|C=+)-(B|C=-)\right] \\
+&= \frac{1}{2}\left[\left[(\text{avg. y|B=+})-(\text{avg. y|B=-})|C=+\right]-\left[(\text{avg. y|B=+})-(\text{avg. y|B=-})|C=-\right]\right] \\
+&= \frac{1}{2}\left[(\text{avg. y|B=+,C=+})-(\text{avg. y|B=-,C=+})-(\text{avg. y|B=+,C=-})+(\text{avg. y|B=-,C=-})\right] \\
+&= \frac{1}{2}\left[\bar{y}_{.22.}-\bar{y}_{.12.}-\bar{y}_{.21.}+\bar{y}_{.11.}\right] \\
+&= \frac{1}{2n}\left[y_{.22.}-y_{.12.}-y_{.21.}+y_{.11.}\right] \\
+&= \frac{1}{2n}\left[\frac{1}{2}(y_{122.}+y_{222.})-\frac{1}{2}(y_{112.}+y_{212.})-\frac{1}{2}(y_{121.}+y_{221.})+\frac{1}{2}(y_{111.}+y_{211.})\right] \\
+&= \frac{1}{4n}\left[y_{122.}+y_{222.}-y_{112.}-y_{212.}-y_{121.}-y_{221.}+y_{111.}+y_{211.}\right] \\
+&= \frac{1}{4n}\left[bc+abc-c-ac-b-ab+(1)+a\right] \\
+&= \frac{1}{4n}\left[(1)+a-b-ab-c-ac+bc+abc\right]
+\end{align*}
+Hence, as shown above, the $BC$ effect in Yates' notation is computed as $\frac{1}{4n}\left[(1)+a-b-ab-c-ac+bc+abc\right]$.
+
+**Lecture 18 Problem 3b:** $\\$
+In this problem, we will multiply the contrast vector for the $BC$ effect by the contrast vector for the $ABC$ effect and identify the corresponding effect. To start off, as computed in the previous problem, the contrast vector for the $BC$ effect is written as $\vec{C}_{BC}=(1,1,-1,-1,-1,-1,1,1)$. Furthermore, as show in class, the $ABC$ effect is written in Yates' notation as $\frac{1}{4n}\left[abc+c-bc-ac-ab-(1)+b+a\right]$. Hence the contrast vector for the $ABC$ effect is written as $\vec{C}_{ABC}=(-1,1,1,-1,1,-1,-1,1)$. Multiplying these two vectors together, we obtain the following contrast vector $\vec{C}=\vec{C}_{BC}*\vec{C}_{BC}=(1,1,-1,-1,-1,-1,1,1)*(-1,1,1,-1,1,-1,-1,1)=(-1,1,-1,1,-1,1,-1,1)$. Lastly, as shown in class, the $A$ effect is written in Yates' notation as $\frac{1}{4n}\left[a+ab+ac+abc-(1)-b-c-bc\right]$. Hence the contrast vector for the $A$ effect is written as $\vec{C}_{A}=(-1,1,-1,1,-1,1,-1,1)$. Therefore, after multiplying the contrast vector for the $BC$ effect by the contrast vector for the $ABC$ effect, we end up with the contrast vector for the $A$ effect.

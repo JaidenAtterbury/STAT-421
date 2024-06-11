@@ -1,0 +1,733 @@
+---
+title: "STAT 421 Homework 5"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Lecture 12 Problem 1:** $\\$
+In this problem, our goal is to show that, in the ANOVA decomposition for the RCBD model, the cross-term between the second and third term is zero. That is, we need to show that $\sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})(y_{ij}-\bar{y}_{i.}-\bar{y}_{.j}+\bar{y}_{..})=0$. The main fact we will use in this problem is that $\sum_j(\bar{y}_{.j}-\bar{y}_{..})=0$ The point of this problem is to show that the cross-terms are zero, and to get practice with the dot-bat notation. This result is shown below.
+\begin{align*}
+\sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})(y_{ij}-\bar{y}_{i.}-\bar{y}_{.j}+\bar{y}_{..}) &= \sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})y_{ij}-\sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{i.}-\sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j} \\
+& \ \ \ \ +\sum_i\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{..} \\
+&= \sum_j(\bar{y}_{.j}-\bar{y}_{..})\sum_i(y_{ij})-\sum_j(\bar{y}_{.j}-\bar{y}_{..})\sum_i(\bar{y}_{i.})-a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j} \\
+& \ \ \ \ +a\bar{y}_{..}\sum_j(\bar{y}_{.j}-\bar{y}_{..}) \\
+&= \sum_j(\bar{y}_{.j}-\bar{y}_{..})y_{.j}-0-a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j}+0 \\
+&= a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\frac{1}{a}y_{.j}-a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j} \\
+&= a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j}-a\sum_j(\bar{y}_{.j}-\bar{y}_{..})\bar{y}_{.j} \\
+&= 0
+\end{align*}
+Thus we have shown that, in the ANOVA decomposition for the RCBD model, the cross-term between the second and third term is zero.
+
+**Lecture 12 Problem 2a:** $\\$
+In this problem, all arithmetic is done all by hand. However, to simplify the computation of the variances, we will use the fact that for $y_1$ and $y_2$, the sample variance can be computed as $S^2=\frac{1}{2}(y_1-y_2)^2$. The data for this problem is shown below.
+
+```{r echo=F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("data8.png")
+```
+
+In this part of the problem in particular, using the data above, we will find the row-means and row-variances. We will start with the row-means below.
+\begin{align*}
+\bar{y}_{1.} &= \frac{4+6}{2} = \frac{10}{2} = 5 \\
+\bar{y}_{2.} &= \frac{10+2}{2} = \frac{12}{2} = 6
+\end{align*}
+As shown above, the row-means are: $\bar{y}_{1.}=5$ and $\bar{y}_{2.}=6$. We will now compute the row-variances below.
+\begin{align*}
+S^2_{11} &= \frac{1}{2}(4-6)^2 = \frac{1}{2}(-2)^2 = \frac{4}{2} = 2 \\
+S^2_{21} &= \frac{1}{2}(10-2)^2 = \frac{1}{2}(8)^2 = \frac{64}{2} = 32
+\end{align*}
+As shown above, the row-variances are: $S^2_{11}=2$ and $S^2_{21}=32$.
+
+**Lecture 12 Problem 2b:** $\\$
+In this part of the problem in particular, using the data above, we will find the column-means and column-variances. Furthermore, we will find the grand mean and $SS_{T}$. We will start with the column-means below.
+\begin{align*}
+\bar{y}_{.1} &= \frac{4+10}{2} = \frac{14}{2} = 7 \\
+\bar{y}_{.2} &= \frac{6+2}{2} = \frac{8}{4} = 6
+\end{align*}
+As shown above, the row-means are: $\bar{y}_{.1}=7$ and $\bar{y}_{.2}=4$. We will now compute the column-variances below.
+\begin{align*}
+S^2_{12} &= \frac{1}{2}(4-10)^2 = \frac{1}{2}(-6)^2 = \frac{36}{2} = 18 \\
+S^2_{22} &= \frac{1}{2}(6-2)^2 = \frac{1}{2}(4)^2 = \frac{16}{2} = 8
+\end{align*}
+As shown above, the row-variances are: $S^2_{12}=18$ and $S^2_{22}=18$. We will now compute the grand-mean below.
+\begin{align*}
+\bar{y}_{..} &= \frac{4+6+10+2}{4} = \frac{22}{4} = \frac{11}{2}
+\end{align*}
+As shown above, the grand mean is $\bar{y}_{..}=\frac{11}{2}$. We will now compute the $SS_{T}$ below.
+\begin{align*}
+SS_{T} &= \sum_i\sum_j(y_{ij}-\bar{y}_{..})^2 \\
+&= \left(4-\frac{11}{2}\right)^2+\left(6-\frac{11}{2}\right)^2+\left(10-\frac{11}{2}\right)^2\left(2-\frac{11}{2}\right)^2 \\
+&= \left(\frac{-3}{2}\right)^2+\left(\frac{1}{2}\right)^2+\left(\frac{9}{2}\right)^2\left(\frac{-7}{2}\right)^2 \\
+&= \frac{9}{4}+\frac{1}{4}+\frac{81}{4}+\frac{49}{4} \\
+&= \frac{140}{4} \\
+&= 35
+\end{align*}
+As shown above, the grand mean is $SS_{T}=35$. We will show the filled in table below.
+
+```{r echo=F, out.width = "50%", fig.align = "center"}
+knitr::include_graphics("data9.png")
+```
+
+**Lecture 12 Problem 2c:** $\\$
+In this problem, for the row-quantities, we must find the variance of the means, and the sum of the variances. Furthermore, if we treat these as $SS_{Tr}$ and $SS_{E}$, respectively, we must find how this relates to $SS_{T}$. We will start by finding the variance of the row-means, as shown below.
+\begin{align*}
+S^2_{\bar{y}_{i.}} &= \frac{1}{2}(5-6)^2 = \frac{1}{2}(-1)^2 = \frac{1}{2}
+\end{align*}
+As shown above, the variance of the row-means is $S^2_{\bar{y}_{i.}}=\frac{1}{2}$. We will now compute the sum of the row-variances, as shown below.
+\begin{align*}
+S^2_{11}+S^2_{21} &= 2+32 = 34
+\end{align*}
+As shown above, the sum of the row-variances is $34$. We will now treat these as $SS_{Tr}$ and $SS_{E}$, respectively, and find how they relate to $SS_{T}$. First off, the definition of $SS_{T}$ is $SS_{T}=n\sum_i(\bar{y}_{i.}-\bar{y}_{..})^2+(n-1)\sum_iS^2_i$. Hence, we can see that replacing the terms inside the sums with our calculated values, we should get 35.
+\begin{align*}
+SS_{T} &= n\sum_i(\bar{y}_{i.}-\bar{y}_{..})^2+(n-1)\sum_iS^2_i \\
+&= 2\cdot\frac{1}{2}+(2-1)\cdot 34 \\
+&= 1+34 \\
+&= 35
+\end{align*}
+Hence we have shown how, for the row-quantities, the variance of the means, and the sum of the variances relate to $SS_{T}$.
+
+**Lecture 12 Problem 2d:** $\\$
+In this problem, for the column-quantities, we must find the variance of the means, and the sum of the variances. Furthermore, if we treat these as $SS_{Tr}$ and $SS_{E}$, respectively, we must find how this relates to $SS_{T}$. We will start by finding the variance of the column-means, as shown below.
+\begin{align*}
+S^2_{\bar{y}_{.j}} &= \frac{1}{2}(7-4)^2 = \frac{1}{2}(-3)^2 = \frac{9}{2}
+\end{align*}
+As shown above, the variance of the column-means is $S^2_{\bar{y}_{.j}}=\frac{9}{2}$. We will now compute the sum of the row-variances, as shown below.
+\begin{align*}
+S^2_{12}+S^2_{22} &= 18+8 = 26
+\end{align*}
+As shown above, the sum of the column-variances is $26$. We will now treat these as $SS_{Tr}$ and $SS_{E}$, respectively, and find how they relate to $SS_{T}$. First off, the definition of $SS_{T}$ is $SS_{T}=n\sum_i(\bar{y}_{i.}-\bar{y}_{..})^2+(n-1)\sum_iS^2_i$. Hence, we can see that replacing the terms inside the sums with our calculated values, we should get 35.
+\begin{align*}
+SS_{T} &= n\sum_i(\bar{y}_{i.}-\bar{y}_{..})^2+(n-1)\sum_iS^2_i \\
+&= 2\cdot\frac{9}{2}+(2-1)\cdot 26 \\
+&= 9+36 \\
+&= 35
+\end{align*}
+Hence we have shown how, for the column-quantities, the variance of the means, and the sum of the variances relate to $SS_{T}$.
+
+**Lecture 12 Problem 3a:** $\\$
+In this problem, we will use the data from problem 4.3 in the textbook. In the experiment, a chemist wishes to test the effect of four chemical agents on the strength of a particular type of cloth. Since the chemist suspects that there might be variability from one bolt to another, she decides to use a randomized block design, with the bolts of cloth considered as blocks. Furthermore, she selects five bolts and applies all four chemicals in random order to each bolt. This data is shown below.
+
+```{r echo=F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("data10.png")
+```
+
+In this part of the problem, we will perform ANOVA by hand to compute a p-value from an F-test of whether the 4 chemicals have an effect on strength, treating the data as if they were collected with a CRD. The ANOVA calculation is done in R below.
+
+```{r}
+# Set up an empty matrix:
+y <- matrix(nrow = 4, ncol = 5)
+
+# Add the data to the matrix:
+y[1,] <- c(73, 68, 74, 71, 67)
+y[2,] <- c(73, 67, 75, 72, 70)
+y[3,] <- c(75, 68, 78, 73, 68)
+y[4,] <- c(73, 71, 75, 75, 69)
+
+# Set up number of treatment factors and replications:
+a <- 4
+n <- 5
+N <- a*n
+
+# Calculate the "effect estimates" for each factor level:
+est_effects <- rowMeans(y) - mean(y)
+
+# Find the sample variance for each treatment factor level:
+vars <- numeric(a)
+for (i in 1:a) {
+  vars[i] <- var(y[i,])
+}
+
+# Compute sums of squares and mean squares for the F-test:
+SS_treat <- n*sum(est_effects^2)
+SS_e <- (n-1)*sum(vars)
+MS_treat <- SS_treat / (a-1)
+MS_e <- SS_e / (N-a)
+
+# Compute the observed F value:
+F_obs <- MS_treat / MS_e
+
+# Compute the p-value of the test:
+p_val_F <- pf(F_obs, a-1, N-a, lower.tail = F)
+```
+
+As computed above, the p-value of this F-test when treating the data as a CRD was `r p_val_F`. Since the p-value is much greater than the significance level chosen in the problem, $\alpha=0.05$, we fail to reject the null in favor of the alternative and have no significant evidence that the 4 chemicals have an effect on strength.
+
+**Lecture 12 Problem 3b:** $\\$
+In this part of the problem, we will perform ANOVA by hand to compute a p-value from an F-test of whether the 4 chemicals have an effect on strength, treating the data as if they were collected with a RCBD. The ANOVA calculation is done in R below.
+
+```{r}
+# Set up number of treatment factors and blocks:
+a_1 <- 4
+b_1 <- 5
+N_1 <- a_1*b_1
+
+# Calculate the "treatment effect estimates" for each factor level:
+treat_effects_1 <- rowMeans(y) - mean(y)
+
+# Calculate the "block effect estimates" for each factor level:
+block_effects_1 <- colMeans(y) - mean(y)
+
+# Compute sums of squares for the F-test:
+SS_T_1 <- sum((as.vector(y)-mean(y))^2)
+SS_treat_1 <- b_1*sum(treat_effects_1^2)
+SS_block_1 <- a_1*sum(block_effects_1^2)
+SS_e_1 <- SS_T_1 - SS_treat_1 - SS_block_1
+
+# Compute mean squares for the F-test:
+MS_treat_1 <- SS_treat_1 / (a_1-1)
+MS_block_1 <- SS_block_1 / (b_1-1)
+MS_e_1 <- SS_e_1 / ((a_1-1)*(b_1-1))
+
+# Compute the observed F value:
+F_obs_1 <- MS_treat_1 / MS_e_1
+
+# Compute the p-value of the test:
+p_val_F_1 <- pf(F_obs_1, a_1-1, (a_1-1)*(b_1-1), lower.tail = F)
+```
+
+As computed above, the p-value of this F-test when treating the data as a RCBD was `r p_val_F_1`. Since the p-value is much greater than the significance level chosen in the problem, $\alpha=0.05$, we fail to reject the null in favor of the alternative and have no significant evidence that the 4 chemicals have an effect on strength. However, we must notice that this p-value decreased by a large amount, this highlights the RCBD's ability to increase the power of a test.
+
+**Lecture 12 Problem 3c:** $\\$
+We are skipping this part of the problem, however, given its relative ease we will do it anyways. In this problem we will produce as residual plot, which is a plot of residuals versus predictions, for the CRD design. A residual is an estimate of the $\epsilon$ in the model. This plot is shown below.
+
+```{r}
+# Turn the matrix of data values into a vector in the same order:
+y_vec <- as.vector(t(y))
+
+# Create the vector of predictions:
+y_ij_hat <- rep(rowMeans(y), each=n)
+
+# Create the vector of residuals:
+epsilon_ij <- y_vec - y_ij_hat
+
+# Plot the residuals versus the predictions:
+plot(y_ij_hat, epsilon_ij, xlab="Predicitons", ylab="Residuals",
+     main="Plot of Residuals versus Predictions")
+
+# Plot the horizontal line for easier interpretation:
+abline(h=0)
+```
+
+Since the points show no pattern around the $y=0$ line, we have evidence that the epsilons are $N(0,\sigma_\epsilon)$.
+
+**Lecture 12 Problem 3d:** $\\$
+We are skipping this part of the problem, however, given its relative ease we will do it anyways. In this problem we will produce as residual plot, which is a plot of residuals versus predictions, for the RCBD design. A residual is an estimate of the $\epsilon$ in the model. This plot is shown below.
+
+```{r}
+# Create the matrix of predictions:
+y_ij_hat_mat <- matrix(nrow = 4, ncol = 5)
+for (i in 1:a_1) {
+  for(j in 1:b_1) {
+    y_ij_hat_mat[i,j] = rowMeans(y)[i] + colMeans(y)[j] - mean(y)
+  }
+}
+
+# Create the vector of predictions:
+y_ij_hat_1 <- as.vector(t(y_ij_hat_mat))
+
+# Create the vector of residuals:
+epsilon_ij_1 <- y_vec - y_ij_hat_1
+
+# Plot the residuals versus the predictions:
+plot(y_ij_hat_1, epsilon_ij_1, xlab="Predictions", ylab="Residuals",
+     main="Plot of Residuals versus Predictions")
+
+# Plot the horizontal line for easier interpretation:
+abline(h=0)
+```
+
+Since the points show no pattern around the $y=0$ line, we have evidence that the epsilons are $N(0,\sigma_\epsilon)$.
+
+**Lecture 12 Problem 3e:** $\\$
+In this problem, we will make a figure that shows the qqplot for the CRD and RCBD residuals on a single figure. We will then comment on the linearity, the y-intercepts, and the slopes of the two different models. The code for constructing the qqplots is shown below.
+
+```{r}
+# Create matrix of residuals:
+resid_mat <- matrix(c(epsilon_ij, epsilon_ij_1), nrow = 2, ncol = N, byrow = T)
+
+# Create qqplots for the residuals in CRD and RCBD:
+plot(c(0,0), cex=0, xlim=c(-2,2), ylim=range(epsilon_ij, epsilon_ij_1),
+     xlab="Theoretical Quantiles",
+     ylab="Sample Quantiles",
+     main="QQplots of Residuals from CRD and RCBD")
+for (i in 1:2) {
+  probs = seq(.5/N,1-.5/N, length=N)
+  Q = qnorm(probs, 0, 1)
+  points(Q, sort(resid_mat[i,]), col=i, pch=19)
+}
+
+# Add a legend:
+legend("topleft",
+       legend=c("CRD Residuals", "RCBD Residuals"), 
+       col=c(1, 2),
+       lty=1)
+```
+
+As can be seen from the above qqplots, both of the models are mostly linear, this shows that there is no violation of the normal distribution of the epsilons assumption. Furthermore, both of the models have an approximate y-intercept of zero, this shows that there is no violation of the expected value of zero of the epsilons assumption. Lastly, unlike the previous two cases, based on the slopes of the two models, the CRD model has the larger variance between the two. This is expected because the purpose of the RBCD is to reduce the variability of the random error component.
+
+**Lecture 13 Problem 1:** $\\$
+In this problem, we will show that for RCBD, the $SS_{E}$, which is defined as $SS_{E}=\sum^2_{i=1}\sum^n_{j=1}(y_{ij}-\bar{y}_{i.}-\bar{y}_{.j}+\bar{y}_{..})^2$, is proportional to the sample variance of differences, which is defined as $S^2_d=\frac{1}{n-1}\sum^n_j(d_j-\bar{d}_{.})^2$. As can be seen from the definition of $d_j \equiv y_{1j}-y_{2j}$, it follows that $d_{.}=y_{1.}-y_{2.}$, and thus $\bar{d}_{.}=\bar{y}_{1.}-\bar{y}_{2.}$. Using the above facts and hints provided in the problem description, this calculation is shown below.
+\begin{align*}
+SS_{E} &= \sum^2_{i=1}\sum^n_{j=1}(y_{ij}-\bar{y}_{i.}-\bar{y}_{.j}+\bar{y}_{..})^2 \\
+&= \sum^n_{j=1}\left[(y_{1j}-\bar{y}_{1.}-\bar{y}_{.j}+\bar{y}_{..})^2+(y_{2j}-\bar{y}_{2.}-\bar{y}_{.j}+\bar{y}_{..})^2\right] \\
+&= \sum^n_{j=1}\left[\left(y_{1j}-\bar{y}_{1.}-\frac{1}{2}(y_{1j}+y_{2j})+\frac{1}{2}(\bar{y}_{1.}+\bar{y}_{2.})\right)^2+\left(y_{2j}-\bar{y}_{2.}-\frac{1}{2}(y_{1j}+y_{2j})+\frac{1}{2}(\bar{y}_{1.}+\bar{y}_{2.})\right)^2\right] \\
+&= \sum^n_{j=1}\left[\left(y_{1j}-\bar{y}_{1.}-\frac{1}{2}y_{1j}-\frac{1}{2}y_{2j}+\frac{1}{2}\bar{y}_{1.}+\frac{1}{2}\bar{y}_{2.}\right)^2+\left(y_{2j}-\bar{y}_{2.}-\frac{1}{2}y_{1j}-\frac{1}{2}y_{2j}+\frac{1}{2}\bar{y}_{1.}+\frac{1}{2}\bar{y}_{2.}\right)^2\right] \\
+&= \sum^n_{j=1}\left[\left(\frac{1}{2}y_{1j}-\frac{1}{2}y_{2j}-\frac{1}{2}\bar{y}_{1.}+\frac{1}{2}\bar{y}_{2.}\right)^2+\left(\frac{1}{2}y_{2j}-\frac{1}{2}y_{1j}-\frac{1}{2}\bar{y}_{2.}+\frac{1}{2}\bar{y}_{1.}\right)^2\right] \\
+&= \sum^n_{j=1}\left[\left(\frac{1}{2}(y_{1j}-y_{2j})-\frac{1}{2}(\bar{y}_{1.}-\bar{y}_{2.})\right)^2+\left(\frac{1}{2}(y_{2j}-y_{1j})-\frac{1}{2}(\bar{y}_{2.}-\bar{y}_{1.})\right)^2\right] \\
+&= \sum^n_{j=1}\left[\left(\frac{1}{2}d_j-\frac{1}{2}\bar{d}_{.}\right)^2+\left(\frac{-1}{2}d_j+\frac{1}{2}\bar{d}_{.}\right)^2\right] \\
+&= \sum^n_{j=1}\left[\frac{1}{4}\left(d_j-\bar{d}_{.}\right)^2+\frac{1}{4}\left(-d_j+\bar{d}_{.}\right)^2\right] \\
+&= \frac{1}{2}\sum^n_{j=1}(d_j-\bar{d}_{.})^2 \quad \text{(Since $(a-b)^2=(-a+b)^2$)} \\
+&= \frac{n-1}{2}S^2_d \\
+&\propto S^2_d
+\end{align*}
+Hence, as shown above, for RCBD, the $SS_{E}$ is proportional to the sample variance of differences.
+
+**Lecture 13 Problem 2:** $\\$
+In this problem, we are considering a farm that has 12 plots, each with 25 plants. We have two treatments ($T_1$, $T_2$), each of which are applied to 6 plots. Each week for 4 weeks the height of all the plants in each plot is measured. The goal of this problem is to describe the design by explaining what are the experimental units, possible existence of blocks, number of replicates, and anything else that may be relevant. We will explain these aspects of the experimental design below.
+
+As explained in lecture 3, experimental units are the things across which the treatments are randomly applied. As noted in the problem description, each of two treatments ($T_1$, $T_2$) is randomly applied to 6 plots. With that said, since the plots are the units in which treatments are randomly applied, it follows that plots are the experimental units in this experiment.
+
+Also, as explained in lecture 3, measurement units are the actual objects on which the response is observed. As noted in the problem description, each plot has 25 plants, and every week for 4 weeks the height of the plants in each plot are measured. Since we are measuring the response, height, on the plants in each plot, it follows that the plants are the measurement units in this experiment. Furthermore, as confirmed in office hours, the heights measured in the 25 plants in each plot are converted into one $y$ value that would appear in the data table, this could perhaps be the average height of the 25 plants. 
+
+As posed in office hours, the existence of any blocks depends on if the treatments are reassigned in each of the 4 weeks of measurement. Since the problem description doesn't explicitly mention re-randomization, we will consider both cases. If the treatments are re-randomized every week, then the weeks themselves become the block factor and the design is a RCBD. However, if treatments are not re-randomized, then there are no block factors and the design is a CRD.
+
+Again, as explained in lecture 3, but more recently in lecture 13, a replication must contain all treatment levels. For the case in which re-randomization does not occur (CRD) then, in each week, since there are 6 plots that get each treatment, it follows that there are 6 replications. However, since this is repeated each week for 4 weeks, it follows that there are 24 replications.
+
+In conclusion, since it wasn't explicitly stated that re-randomization occurred, we will take plots as the experimental units, conclude that no block factors exist, and take the number of replicates to be 24. This design is considered a completely randomized design (CRD).
+
+**Lecture 14 Problem 1:** $\\$
+In this problem, our goal is to find the twelve possible 3x3 LS's through switching 2 rows and/or 2 columns at a time. We will denote row and column switches with $\leftrightarrow$. For example, $R_1 \leftrightarrow R_2$ means, switch row 1 with row 2. All twelve 3x3 Latin Squares, and how we obtained them, are shown below.
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C \\
+B & C & A \\
+C & A & B \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+A & B & C \\
+C & A & B \\
+B & C & A \\
+\end{pmatrix}
+\overset{\text{$C_2$ $\leftrightarrow$ $C_3$}}{\longrightarrow}
+\begin{pmatrix}
+A & C & B \\
+C & B & A \\
+B & A & C \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+A & C & B \\
+B & A & C \\
+C & B & A \\
+\end{pmatrix}
+\overset{\text{$C_1$ $\leftrightarrow$ $C_3$}}{\longrightarrow}
+\end{aligned}
+\]
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+B & C & A \\
+C & A & B \\
+A & B & C \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+B & C & A \\
+A & B & C \\
+C & A & B \\
+\end{pmatrix}
+\overset{\text{$C_2$ $\leftrightarrow$ $C_3$}}{\longrightarrow}
+\begin{pmatrix}
+B & A & C \\
+A & C & B \\
+C & B & A \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+B & A & C \\
+C & B & A \\
+A & C & B \\
+\end{pmatrix}
+\overset{\text{$C_1$ $\leftrightarrow$ $C_3$}}{\longrightarrow}
+\end{aligned}
+\]
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+C & A & B \\
+A & B & C \\
+B & C & A \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+C & A & B \\
+B & C & A \\
+A & B & C \\
+\end{pmatrix}
+\overset{\text{$C_2$ $\leftrightarrow$ $C_3$}}{\longrightarrow}
+\begin{pmatrix}
+C & B & A \\
+B & A & C \\
+A & C & B \\
+\end{pmatrix}
+\overset{\text{$R_2$ $\leftrightarrow$ $R_3$}}{\longrightarrow}
+\begin{pmatrix}
+C & B & A \\
+A & C & B \\
+B & A & C \\
+\end{pmatrix}
+\hspace{12mm}
+\end{aligned}
+\]
+
+**Lecture 14 Problem 2a:** $\\$
+As defined in class, among the set of all Latin Squares, those for which the first row and first column are identical are called Standard. However, in the book, a standard Latin Square is also required to have the letters in increasing order. In this problem, our goal is to obtain the four standard 4x4 Latin Squares. In order to do this, we will start with the first row and first column set to A, B, C, D, and then generate the other entries while keeping in mind that no row or column can have more than one occurrence of any letter.
+
+This general form of a 4x4 Standard Latin Square is
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B &  &  &  \\
+C &  &  &  \\
+D &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+From here, row 2 column 2 has the possible entries of A, B, C, hence the three possible 4x4 Standard Latin Square forms are
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & A &  &  \\
+C &  &  &  \\
+D &  &  &  \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & C &  &  \\
+C &  &  &  \\
+D &  &  &  \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & D &  &  \\
+C &  &  &  \\
+D &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+Starting with the leftmost form, we can see that the remaining entries in the second row and second column must be D followed by C, thus we have
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D &  &  \\
+D & C &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+From here, we can either have B on the remaining entries of the main diagonal, or A on the remaining entries of the main diagonal. Hence two of the four standard 4x4 Latin Squares are
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D & A & B \\
+D & C & B & A \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D & B & A \\
+D & C & A & B \\
+\end{pmatrix}
+\end{aligned}
+\]
+Moving onto the middle form, we can see that the remaining entries in the second row and second column must be D followed by A, thus we have
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & C & D & A \\
+C & D &  &  \\
+D & A &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+From here, we must have A and C on the main diagonal, leaving B to fill the remaining two spots, thus the third of the four standard 4x4 Latin Squares is
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & C & D & A \\
+C & D & A & B \\
+D & A & B & C \\
+\end{pmatrix}
+\end{aligned}
+\]
+Moving onto the final and leftmost form, we can see that the remaining entries in the second row and second column must be A followed by C, thus we have
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & D & A & C \\
+C & A &  &  \\
+D & C &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+From here, we must have D and A on the main diagonal, leaving B to fill the remaining two spots, thus the fourth of the four standard 4x4 Latin Squares is
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & D & A & C \\
+C & A & D & B \\
+D & C & B & A \\
+\end{pmatrix}
+\end{aligned}
+\]
+In summary, the four standard 4x4 Latin Squares are
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D & A & B \\
+D & C & B & A \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D & B & A \\
+D & C & A & B \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & C & D & A \\
+C & D & A & B \\
+D & A & B & C \\
+\end{pmatrix}
+\begin{pmatrix}
+A & B & C & D \\
+B & D & A & C \\
+C & A & D & B \\
+D & C & B & A \\
+\end{pmatrix}
+\end{aligned}
+\]
+
+**Lecture 14 Problem 2b:** $\\$
+Given one the following Standard 4x4 Latin Square
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A & B & C & D \\
+B & A & D & C \\
+C & D & A & B \\
+D & C & B & A \\
+\end{pmatrix}
+\end{aligned}
+\]
+the goal of this problem is to find all Latin Squares, standard or not, different or not, that are orthogonal to it. The way we will do this is by setting the first row of the matrix to $\alpha$, $\beta$, $\gamma$, $\delta$, and use these Greek letters to fill in the remainder of the Latin Square, while always requiring orthogonality and the definition of a Latin Square.
+
+By setting the first row of the matrix to $\alpha$, $\beta$, $\gamma$, $\delta$, we obtain
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+ &  &  &  \\
+ &  &  &  \\
+ &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+Now, looking at the entry in row 2 column 1, in order to maintain orthogonality and the definition of a Latin Square, we know that this entry cannot be $\alpha$ or $\beta$. Thus there will be two cases, one with $\gamma$ in this position, and one with $\delta$ in this position. We will start with the $\gamma$ as shown below.
+
+Given that the entry in row 2 column 1 is $\gamma$ our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\gamma &  &  &  \\
+ &  &  &  \\
+ &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 1, notice that in order to maintain orthogonality, the entry in row 4 column 1 cannot be $\delta$, thus it must be $\beta$ and the entry in row 3 column 1 is $\delta$. Our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\gamma &  &  &  \\
+\delta &  &  &  \\
+\beta  &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 2, notice that in order to maintain orthogonality, the entry in row 2 column 2 cannot be $\alpha$. Furthermore, notice that in order to maintain the definition of a Latin Square, the entry in row 2 column 2 cannot be $\beta$ or $\gamma$, thus it must be $\delta$. Also, notice that in order to maintain orthogonality, the entry in row 4 column 2 cannot be $\gamma$. Furthermore, notice that in order to maintain the definition of a Latin Square, the entry in row 2 column 2 cannot be $\beta$ or $\delta$, thus it must be $\alpha$. With that said, that means the only possibility for the entry in row 3 column 2 is $\gamma$. Hence, our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\gamma & \delta &  &  \\
+\delta & \gamma &  &  \\
+\beta  & \alpha &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 3, notice that in order to maintain orthogonality, the entry in row 3 column 3 cannot be $\alpha$. Furthermore, notice that to maintain the definition of a Latin Square, the entry in row 3 column 3 cannot be $\delta$ or $\gamma$, thus it must be $\beta$. Also, notice that in order to maintain the definition of a Latin Square, the entry in row 4 column 3 cannot be $\alpha$, $\beta$, or $\gamma$, thus it must be $\delta$. With that said, that means the only possibility for the entry in row 2 column 3 is $\alpha$. Hence, our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\gamma & \delta & \alpha &  \\
+\delta & \gamma & \beta  &  \\
+\beta  & \alpha & \delta &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+Since we only have 3 entries left, it turns out that we know all of these entries simply due to definition of a Latin Square, hence our first orthogonal Latin Square is
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta  & \gamma & \delta \\
+\gamma & \delta & \alpha & \beta \\
+\delta & \gamma & \beta  & \alpha \\
+\beta  & \alpha & \delta & \gamma \\
+\end{pmatrix}
+\end{aligned}
+\]
+Juxtaposing the above matrix with our original standard matrix gives us
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A\alpha & B\beta & C\gamma & D\delta \\
+B\gamma & A\delta & D\alpha & C\beta \\
+C\delta & D\gamma & A\beta  & B\alpha \\
+D\beta  & C\alpha & B\delta & A\gamma \\
+\end{pmatrix}
+\end{aligned}
+\]
+Since all of these pairs are unique, our Greco-Latin Square is orthogonal.
+
+Similarly, if we put $\delta$ in row 2 column 1, we obtain the following. Given that the entry in row 2 column 1 is $\delta$ our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta &  &  &  \\
+ &  &  &  \\
+ &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 1, notice that in order to maintain orthogonality, the entry in row 3 column 1 cannot be $\gamma$, thus it must be $\beta$ and the entry in row 4 column 1 is therefore $\gamma$. Our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta &  &  &  \\
+\beta &  &  &  \\
+\gamma  &  &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 2, notice that in order to maintain orthogonality, the entry in row 2 column 2 cannot be $\alpha$. Furthermore, notice that in order to maintain the definition of a Latin Square, the entry in row 2 column 2 cannot be $\beta$ or $\delta$, thus it must be $\gamma$. Also, notice that in order to maintain orthogonality, the entry in row 3 column 2 cannot be $\delta$. Furthermore, notice that in order to maintain the definition of a Latin Square, the entry in row 3 column 2 cannot be $\beta$ or $\gamma$, thus it must be $\alpha$. With that said, that means the only possibility for the entry in row 4 column 2 is $\delta$. Hence, our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta & \gamma &  &  \\
+\beta & \alpha &  &  \\
+\gamma  & \delta &  &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+To finish off column 3, notice that in order to maintain orthogonality, the entry in row 3 column 3 cannot be $\alpha$. Furthermore, notice that to maintain the definition of a Latin Square, the entry in row 3 column 3 cannot be $\beta$ or $\gamma$, thus it must be $\delta$. Also, notice that in order to maintain the definition of a Latin Square, the entry in row 4 column 3 cannot be $\beta$, $\delta$, or $\gamma$, thus it must be $\alpha$. With that said, that means the only possibility for the entry in row 2 column 3 is $\beta$. Hence, our Latin Square becomes
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta & \gamma & \beta &  \\
+\beta & \alpha & \delta  &  \\
+\gamma  & \delta & \alpha &  \\
+\end{pmatrix}
+\end{aligned}
+\]
+Since we only have 3 entries left, it turns out that we know all of these entries simply due to definition of a Latin Square, hence our second orthogonal Latin Square is
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta & \gamma & \beta & \alpha\\
+\beta & \alpha & \delta  & \gamma \\
+\gamma  & \delta & \alpha & \beta \\
+\end{pmatrix}
+\end{aligned}
+\]
+Juxtaposing the above matrix with our original standard matrix gives us
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+A\alpha & B\beta & C\gamma & D\delta \\
+B\delta & A\gamma & D\beta & C\alpha\\
+C\beta & D\alpha & A\delta  & B\gamma \\
+D\gamma  & C\delta & B\alpha & A\beta \\
+\end{pmatrix}
+\end{aligned}
+\]
+Since all of these pairs are unique, our Greco-Latin Square is orthogonal
+
+In summary, the two orthogonal 4x4 Latin Squares are
+\[
+\begin{aligned}
+&
+\begin{pmatrix}
+\alpha & \beta  & \gamma & \delta \\
+\gamma & \delta & \alpha & \beta \\
+\delta & \gamma & \beta  & \alpha \\
+\beta  & \alpha & \delta & \gamma \\
+\end{pmatrix}
+\begin{pmatrix}
+\alpha & \beta & \gamma & \delta \\
+\delta & \gamma & \beta & \alpha\\
+\beta & \alpha & \delta  & \gamma \\
+\gamma  & \delta & \alpha & \beta \\
+\end{pmatrix}
+\end{aligned}
+\]
+Note that if we accounted/cared for mixing the letters on the top, there would be 48 orthogonal Latin Squares.

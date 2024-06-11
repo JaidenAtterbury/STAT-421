@@ -1,0 +1,47 @@
+---
+title: "STAT 421 Homework 1"
+output: pdf_document
+date: "2023-10-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Lecture 2 problems:**
+
+1. Consider the design above leading to this data
+
+```{r echo=F, out.width = "70%", fig.align = "center"}
+knitr::include_graphics("data.png")
+```
+
+  a. Write down the replication effect. Hint: Any effect is the difference between two means.
+  
+If we assume that there is no coupon or tip effect, than we can find the replication effect by averaging over tip and coupon. To do this we will find the average of all observations from the second replication and subtract from that the average of all observations from the first replication. This is shown below.
+
+$$\frac{1}{4}\left(y_{112}+y_{122}+y_{212}+y_{222}\right)-\frac{1}{4}\left(y_{111}+y_{121}+y_{211}+y_{221}\right)$$
+
+  b. Suppose this data are the result of a design in which the coupon factor and the replication factor are both nuisance factors, and the treatment factor is the tip. Additionally, suppose there is no replication effect, but the coupon effect is significant. Then, the answer to the hardness question involves finding TWO tip effects. Write them down.
+  
+Since there is no replication effect, but a significant coupon effect, in order to answer the hardness question we must find two tip effects; one for coupon 1 and one for coupon 2. We will do this by averaging over replication for each coupon. In both cases, we use the $\bar{y}_{high}-\bar{y}_{low}$ convention.
+
+For coupon 1, the tip effect is:
+
+$$\frac{1}{2}\left(y_{211}+y_{212}\right)-\frac{1}{2}\left(y_{111}+y_{112}\right)$$
+
+For coupon 2, the tip effect is:
+
+$$\frac{1}{2}\left(y_{221}+y_{222}\right)-\frac{1}{2}\left(y_{121}+y_{122}\right)$$
+
+2. We are building a telescope to launch into space. The performance of the telescope depends on the choice of 3 lenses. Additionally, we suspect that the performance depends on the telescope operator, of which there are two. Finally, the runs necessary to test the telescope have to be performed across 4 days, because the telescope actually heats up during the test, and that heat may affect performance.
+
+What is the response, and what are the factors in this experiment? Also identify each of the factors as treatment or nuisance. Hint: This is one of the ambiguous questions I've been talking about. You must use your common sense and the description of the problem to resolve any ambiguity.
+
+Since the goal of this experiment is to "optimize" the performance of a telescope that we are launching into space, it follows that the response in this experiment is the performance of the telescope. Additionally, from the problem description, the factors of this experiment are: the type of lens (3 levels), telescope operator (2 levels), and lastly, testing days (4 levels).
+
+The only treatment factor in this experiment is the lens factor. Type of lens is considered a treatment factor in this experiment because in the problem description it states that the choice of lens will directly influence the performance of our telescope, which is the response. Since we know that the choice of lens will directly impact the performance of the telescope, it is of utmost interest for the experimenters to test which lens leads to the best telescope performance prior to launch. Lastly, the lens choice is something that the experimenters care about because it is one of the foundational pieces that make up the telescope itself. The impact that the type of lens has on telescope performance is similar to the impact the type of tires have on a race car.
+
+The nuisance factors in this experiment are operator and testing days. Testing days is a nuisance factor because its inclusion is simply due to a side effect that would be imposed if it wasn't included rather than the experimenters actually caring about the factor itself in the telescope launching process. More concretely, if the 4 testing days weren't included, the heating up of the telescope could impact the telescope performance. Thus the inclusion of this factor is simply to make our estimates of the treatment factor more precise, as well as to avoid any variation that may be caused by the heating up of the telescope. Lastly, there is no notion of days in space, which again is evidence for why testing days is a nuisance factor.
+
+Although it is fairly easy to argue the other side due to the fact that it might impact telescope performance, the telescope operator is a nuisance factor in this experiment because, like testing days, its inclusion is simply to make estimates of the treatment factor more precise and to eliminate avenues of variation. The notion that the operator is a nuisance factor is further supported by the problem description as it never mentions that the experimenters are choosing a specific operator, they are merely using both in the test as this may be a cause of variation that we want to account for. From a more practical viewpoint, it doesn't make sense to have only one operator, as life events may force other operators to control the telescope. Thus, different operators aren't something we are specifically testing for, and hence a nuisance factor. Lastly, similar to days, it is also unclear if there is even a notion of operator in space, which again is evidence for why operator is a nuisance factor.
